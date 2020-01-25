@@ -1,0 +1,289 @@
+﻿<Window x:Class="InvoicingSystem_SQLite.Views.InvoiceView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:system="clr-namespace:System;assembly=mscorlib"
+        mc:Ignorable="d" 
+      d:DesignHeight="300" d:DesignWidth="400"
+      Title="InvoiceView" Background="White">
+
+    <!--VARIABLES-->
+    <Window.Resources>
+        <system:Double x:Key="minFieldWidth">100</system:Double>
+        <system:Double x:Key="txtboxCorporationNameWidth">287</system:Double>
+        <Thickness x:Key="vboxMargin" Left="10" Top="0" Right="10" Bottom="0"/>
+        <Thickness x:Key="stkMargin"  Left="0" Top="2.725" Right="0" Bottom="2.725"/>
+    </Window.Resources>
+
+    <Border BorderBrush="Black" BorderThickness="0,0,1,1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="50,50">
+        <Grid ShowGridLines="False">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Border Grid.Column="1" Grid.Row="0" VerticalAlignment="Top" BorderThickness="1,1,0,0" 
+                    HorizontalAlignment="Right" Padding="10">
+                <StackPanel Orientation="Horizontal" >
+                    <TextBlock Text="Číslo faktury: " Margin="0" />
+                    <TextBlock Text="20180011"/>
+                </StackPanel>
+            </Border>
+
+            <Border Grid.Row="1" Grid.Column="0" HorizontalAlignment="Stretch" Margin="0" BorderThickness="1,1,1,1" Padding="10,0">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Dodavatel" FontWeight="Bold"/>
+
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Vaše jméno: "/>
+                    <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding ContractorName, ValidatesOnDataErrors=True}" 
+                         x:Name="ContractorNameTxt"/>
+
+                    <!--CONTRACTOR STREET-->
+                    <TextBlock Grid.Row="2" Grid.Column="0" Text="Ulice: "/>
+                    <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding ContractorStreet, ValidatesOnDataErrors=True}"
+                         x:Name="ContractorStreetTxt"/>
+                    <!--END OF CONTRACTOR STREET-->
+
+                    <!--CONTRACTOR BUILDING NUMBER-->
+                    <TextBlock Grid.Row="3" Grid.Column="0" Text="Číslo popisné: "/>
+                    <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding ContractorBuildingNumber, ValidatesOnDataErrors=True}"
+                         x:Name="ContractorBuildingNumberTxt"/>
+                    <!--END OF CONTRACTOR BUILDING NUMBER-->
+
+                    <!--CONTRACTOR ZIPCODE-->
+                    <TextBlock Grid.Row="4" Grid.Column="0" Text="PSČ: "/>
+                    <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding ContractorZip, ValidatesOnDataErrors=True}"
+                         x:Name="ContractorZipTxt"/>
+                    <!--END OF CONTRACTOR ZIPCODE-->
+
+                    <!--CONTRACTOR CITY-->
+                    <TextBlock Grid.Row="5" Grid.Column="0" Text="Město: "/>
+                    <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding ContractorCity, ValidatesOnDataErrors=True}" 
+                         x:Name="ContractorCityTxt"/>
+                    <!--END OF CONTRACTOR CITY-->
+
+                    <!--CONTRACTOR IDENTIFICATION NUMBER-->
+                    <TextBlock Grid.Row="6" Grid.Column="0" Text="IČ: "/>
+                    <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding ContractorIn, ValidatesOnDataErrors=True}"
+                         x:Name="ContractorInTxt"/>
+                    <!--END OF CONTRACTOR IDENTIFICATION NUMBER-->
+
+                    <!--CONTRACTOR VAT PAYER-->
+                    <TextBlock Grid.Row="7" Grid.Column="0" Text="Plátce DPH: "/>
+                    <CheckBox Grid.Row="7" Grid.Column="1" IsChecked="True"/>
+                    <!--END OF CONTRACTOR VAT PAYER-->
+
+                    <!--CONTRACTOR CITY OF EVIDENCE-->
+                    <TextBlock Grid.Row="8" Grid.Column="0" Text="Podnikatel zapsán v živ. rejstříku MÚ "/>
+                    <TextBox Grid.Row="8" Grid.Column="1" Text="{Binding CityOfEvidence, ValidatesOnDataErrors=True}"
+                         x:Name="ContractorCityOfEvidenceTxt"/>
+                    <!--END OF CONTRACTOR CITY OF EVIDENCE-->
+                </Grid>
+            </Border>
+
+            <Border Grid.Row="1" Grid.Column="1" BorderThickness="0,1,0,1" Padding="10,0">
+                <Grid >
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Odběratel" FontWeight="Bold"/>
+
+                    <!--CUSTOMER NAME-->
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Název společnosti: "/>
+                    <TextBox Grid.Row="1" Grid.Column="1" x:Name="CustomerNameTxt" 
+                             Text="{Binding CustomerName, ValidatesOnDataErrors=True}"/>
+                    <!--END OF CUSTOMER NAME-->
+
+                    <!--CUSTOMER STREET-->
+                    <TextBlock Grid.Row="2" Grid.Column="0" Text="Ulice: "/>
+                    <TextBox Grid.Row="2" Grid.Column="1" x:Name="CustomerStreetTxt" 
+                             Text="{Binding CustomerStreet, ValidatesOnDataErrors=True}"/>
+                    <!--END OF CUSTOMER STREET-->
+
+                    <!--CUSTOMER BUILDING NUMBER-->
+                    <TextBlock Grid.Row="3" Grid.Column="0" Text="Číslo popisné:"/>
+                    <TextBox Grid.Row="3" Grid.Column="1" x:Name="CustomerBuildingNumberTxt"
+                             Text="{Binding CustomerBuildingNumber, ValidatesOnDataErrors=True}"/>
+                    <!--END OF CUSTOMER BUILDING NUMBER-->
+
+                    <!--CUSTOMER ZIPCODE-->
+                    <TextBlock Grid.Row="4" Grid.Column="0" Text="PSČ: "/>
+                    <TextBox Grid.Row="4" Grid.Column="1" x:Name="CustomerZipTxt"
+                             Text="{Binding CustomerZip, ValidatesOnDataErrors=True}"/>
+                    <!--END OF CUSTOMER ZIPCODE-->
+
+                    <!--CUSTOMER CITY-->
+                    <TextBlock Grid.Row="5" Grid.Column="0" Text="Město: "/>
+                    <TextBox Grid.Row="5" Grid.Column="1" x:Name="CustomerCityTxt" 
+                             Text="{Binding CustomerCity, ValidatesOnDataErrors=True}"/>
+                    <!--END OF CUSTOMER CITY-->
+
+                    <!--CUSTOMER IN-->
+                    <TextBlock Grid.Row="6" Grid.Column="0" Text="IČ: "/>
+                    <TextBox Grid.Row="6" Grid.Column="1" x:Name="CustomerInTxt"
+                             Text="{Binding CustomerIn, ValidatesOnDataErrors=True}"/>
+                    <!--END OF CUSTOMER IN-->
+
+                    <!--CUSTOMER VATIN-->
+                    <TextBlock Grid.Row="7" Grid.Column="0" Text="DIČ: "/>
+                    <TextBox Grid.Row="7" Grid.Column="1" x:Name="CustomerVatinTxt"
+                             Text="{Binding CustomerVatin, ValidatesOnDataErrors=True}"/>
+                    <!--END OF CUSTOMER IN & VATIN-->
+                </Grid>
+            </Border>
+
+            <Border Grid.Row="2" Grid.Column="0" HorizontalAlignment="Stretch" BorderThickness="1,0,1,1" Padding="10">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!--PAYMENT CONDITION SECTION-->
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Platební podmínky: " FontWeight="Bold"/>
+                    <!--PAYMENT METHOD-->
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Forma úhrady: "/>
+                    <ComboBox Grid.Row="1" Grid.Column="1" MinWidth="{StaticResource minFieldWidth}" 
+                              HorizontalAlignment="Left"/>
+                    <!--END OF PAYMENT METHOD-->
+
+                    <!--BANK CONNECTION-->
+                    <TextBlock Grid.Row="2" Grid.Column="0" Text="Bankovní spojení: "/>
+                    <TextBox Grid.Row="2" Grid.Column="1" x:Name="BankConnectionTxt" 
+                             Text="{Binding BankConnection, ValidatesOnDataErrors=True}"/>
+                    <!--END OF BANK CONNECTION-->
+
+                    <!--BANK ACCOUNT NUMBER-->
+                    <TextBlock Grid.Row="3" Grid.Column="0" Text="Číslo účtu: "/>
+                    <TextBox Grid.Row="3" Grid.Column="1" x:Name="BankAccountTxt"
+                             Text="{Binding BankAccount, ValidatesOnDataErrors=True}"/>
+                    <!--END OF BANK ACCOUNT NUMBER-->
+
+                    <!--VARIABLE SYMBOL-->
+                    <TextBlock Grid.Row="4" Grid.Column="0" Text="Variabilní symbol: "/>
+                    <TextBox Grid.Row="4" Grid.Column="1" x:Name="VariableSymbolTxt" 
+                             Text="{Binding VariableSymbol, ValidatesOnDataErrors=True}"/>
+                    <!--END OF VARIABLE SYMBOL-->
+                </Grid>
+            </Border>
+
+            <Border Grid.Row="2" Grid.Column="1" HorizontalAlignment="Stretch" BorderThickness="0,0,0,1" Padding="10">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Datum vystavení: "/>
+                    <DatePicker Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left"/>
+
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Datum splatnosti: "/>
+                    <DatePicker Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left"/>
+                </Grid>
+            </Border>
+
+            <Border Grid.Column="0" Grid.Row="3"
+                    HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderThickness="1,0,1,1" Padding="10,10,10,2">
+
+                <Grid  HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0" Text="Fakturujeme vám: " FontWeight="Bold"/>
+
+                    <TextBox Grid.Row="1" 
+                             VerticalScrollBarVisibility="Auto" 
+                             Margin="0"
+                             AcceptsReturn="True" 
+                             AcceptsTab="True" 
+                             TextWrapping="Wrap" 
+                             HorizontalAlignment="Stretch" 
+                             VerticalAlignment="Stretch" 
+                             MinHeight="150" 
+                             x:Name="JobDescriptionTxt"
+                             Text="{Binding JobDescription, ValidatesOnDataErrors=True}">
+                        <TextBox.Style>
+                            <Style TargetType="TextBox">
+                                <Style.Setters>
+                                    <Setter Property="BorderThickness" Value="0"/>
+                                </Style.Setters>
+                            </Style>
+                        </TextBox.Style>
+                    </TextBox>
+                </Grid>
+            </Border>
+
+            <Border Grid.Column="1" Grid.Row="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                    BorderThickness="0,0,0,1" Padding="10">
+
+                <StackPanel Orientation="Horizontal"  VerticalAlignment="Top">
+                    <TextBlock Text="Celkem: "/>
+                    <TextBox Margin="0,2" x:Name="PriceTxt" Text="{Binding Price, ValidatesOnDataErrors=True}"/>
+                </StackPanel>
+            </Border>
+
+            <Border Grid.Row="4" Grid.Column="0" BorderThickness="1,0,0,0"/>
+            <Border Grid.Column="1" Grid.Row="4" Padding="10" HorizontalAlignment="Left" VerticalAlignment="Top" 
+                    BorderThickness="0,0,0,0">
+                <!--SIGNATURE SECTION-->
+                <StackPanel Orientation="Horizontal"  >
+                    <TextBlock Text="Vystavil: " FontWeight="Bold"/>
+                    <TextBlock FontWeight="Bold" Text="Jiří Kocourek"/>
+                </StackPanel>
+                <!--END OF SIGNATURE SECTION-->
+            </Border>
+
+
+        </Grid>
+    </Border>
+</Window>
