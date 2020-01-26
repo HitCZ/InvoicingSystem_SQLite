@@ -3,7 +3,8 @@ using OfficeOpenXml;
 using OfficeOpenXml.Style;
 using System.Collections.Generic;
 using System.IO;
-using InvoicingSystem_SQLite.Models;
+using Invoicing;
+using Invoicing.Classes;
 
 namespace InvoicingSystem.Logic.ExcelCreation
 {
@@ -15,7 +16,6 @@ namespace InvoicingSystem.Logic.ExcelCreation
         private const string PATH = "test.xlsx";
         //private const string FONT_NAME = Strings.FONT;
         //private const float FONT_SIZE = 11f;
-        private PaymentCondition paymentCondition;
         /// <summary>
         ///  ((hint, position) value)
         /// </summary>
@@ -44,7 +44,6 @@ namespace InvoicingSystem.Logic.ExcelCreation
             this.invoice = invoice;
             contractor = invoice.Contractor;
             customer = invoice.Customer;
-            paymentCondition = invoice.PaymentCondition;
             InitDictionary();
 
             var excelFile = new FileInfo(PATH);
@@ -71,7 +70,7 @@ namespace InvoicingSystem.Logic.ExcelCreation
             FillHeaderInfo();
             FillContractorInfo();
             FillCustomerInfo();
-            FillPaymentConditionsInfo();
+            FillinvoicesInfo();
             FillJobDescriptionInfo();
             FillPriceInfo();
             FillSignatureInfo();
@@ -144,7 +143,7 @@ namespace InvoicingSystem.Logic.ExcelCreation
         /// <summary>
         /// Adds payment conditions info into the dictionary.
         /// </summary>
-        private void FillPaymentConditionsInfo()
+        private void FillinvoicesInfo()
         {
             coordsAndValues.Add(new KeyValuePair<string, string>(
                 "conditionCaption", "C17"), Strings.CONDITION_CAPTION);
@@ -152,31 +151,31 @@ namespace InvoicingSystem.Logic.ExcelCreation
                 "conditionPaymentMethodCaption", "C19"), Strings.CONDITION_PAYMENT_METHOD_CAPTION);
             coordsAndValues.Add(new KeyValuePair<string, string>(
                 "conditionPaymentMethod", "D19"),
-                $"{paymentCondition.PaymentMethodString}");
+                $"{invoice.PaymentMethod.ToString()}");
             coordsAndValues.Add(new KeyValuePair<string, string>(
                 "conditionBankConnectionCaption", "C20"), Strings.CONDITION_BANK_CONNECTION_CAPTION);
             coordsAndValues.Add(new KeyValuePair<string, string>(
                 "conditionBankConnection", "D20"),
-                $"{paymentCondition.BankConnection}");
+                $"{invoice.BankConnection}");
             coordsAndValues.Add(new KeyValuePair<string, string>(
                 "conditionAccountNumberCaption", "C21"), Strings.CONDITION_ACCOUNT_NUMBER_CAPTION);
             coordsAndValues.Add(new KeyValuePair<string, string>(
                 "conditionAccountNumber", "D21"),
-                $"{paymentCondition.AccountNumber}");
+                $"{invoice.AccountNumber}");
             coordsAndValues.Add(new KeyValuePair<string, string>(
                 "conditionVariableSymbolCaption", "C22"), Strings.CONDITION_VARIABLE_SYMBOL_CAPTION);
             coordsAndValues.Add(new KeyValuePair<string, string>(
                 "conditionVariableSymbol", "D22"),
-                $"{paymentCondition.VariableSymbol}");
+                $"{invoice.VariableSymbol}");
             coordsAndValues.Add(new KeyValuePair<string, string>(
                 "conditionDateOfIssueCaption", "G19"), Strings.CONDITION_DATE_OF_ISSUE_CAPTION);
             coordsAndValues.Add(new KeyValuePair<string, string>(
                 "conditionDateOfIssue", "H19"),
-                $"{paymentCondition.DateOfIssue:dd.MM.yyy}");
+                $"{invoice.DateOfIssue:dd.MM.yyy}");
             coordsAndValues.Add(new KeyValuePair<string, string>(
                 "conditionDueDateCaption", "G21"), Strings.CONDITION_DUE_DATE_CAPTION);
             coordsAndValues.Add(new KeyValuePair<string, string>(
-                "conditionDueDate", "H21"), $"{paymentCondition.DueDate:dd.MM.yyy}");
+                "conditionDueDate", "H21"), $"{invoice.DueDate:dd.MM.yyy}");
         }
 
         /// <summary>
