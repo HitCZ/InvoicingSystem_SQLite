@@ -1,4 +1,6 @@
-﻿namespace InvoicingSystem_SQLite.Views
+﻿using InvoicingSystem_SQLite.ServiceLocation;
+
+namespace InvoicingSystem_SQLite.Views
 {
     /// <summary>
     /// Interaction logic for InvoiceView.xaml
@@ -8,6 +10,9 @@
         public InvoiceView()
         {
             InitializeComponent();
+
+            var bootstrapper = new Bootstrapper();
+            bootstrapper.Run();
         }
     }
 }

@@ -1,0 +1,58 @@
+CREATE TABLE "Addresses" (
+	"Id"	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+	"Street"	TEXT NOT NULL,
+	"BuildingNumber"	TEXT NOT NULL,
+	"City"	TEXT NOT NULL,
+	"ZipCode"	TEXT NOT NULL
+)
+
+CREATE TABLE "BankInformation" (
+	"Id"	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+	"BankConnection"	TEXT,
+	"AccountNumber"	TEXT,
+	"VariableSymbol"	TEXT
+)
+
+
+CREATE TABLE "Contractors" (
+	"Id"	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+	"IdAddress"	INTEGER NOT NULL,
+	"FirstName"	TEXT,
+	"LastName"	TEXT,
+	"IN"	INTEGER NOT NULL UNIQUE,
+	"VATIN"	INTEGER NOT NULL UNIQUE,
+	"CityOfEvidence"	TEXT NOT NULL,
+	"IsVatPayer"	INTEGER NOT NULL
+)
+
+CREATE TABLE "Customers" (
+	"Id"	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+	"IdAddress"	INTEGER NOT NULL,
+	"FirstName"	TEXT,
+	"LastName"	TEXT,
+	"IN"	INTEGER NOT NULL UNIQUE,
+	"VATIN"	TEXT NOT NULL UNIQUE,
+	"CorporationName"	TEXT NOT NULL UNIQUE
+)
+
+CREATE TABLE "Invoices" (
+	"Id"	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+	"InvoiceNumber"	INTEGER NOT NULL UNIQUE,
+	"IdContractor"	INTEGER NOT NULL,
+	"IdCustomer"	INTEGER NOT NULL,
+	"JobDescription"	TEXT NOT NULL,
+	"Price"	NUMERIC NOT NULL,
+	"PaymentMethod"	REAL NOT NULL,
+	"IdBankInformation"	INTEGER NOT NULL,
+	"DateOfIssue"	TEXT NOT NULL,
+	"DueDate"	TEXT NOT NULL,
+	CONSTRAINT fk_contractors
+		FOREIGN KEY (IdContractor) 
+		REFERENCES Contractors(Id),
+	CONSTRAINT fk_customers
+		FOREIGN KEY (IdCustomer) 
+		REFERENCES Customers(Id),
+	CONSTRAINT fk_bankInformation
+		FOREIGN KEY (IdBankInformation) 
+		REFERENCES BankInformation(Id)
+)

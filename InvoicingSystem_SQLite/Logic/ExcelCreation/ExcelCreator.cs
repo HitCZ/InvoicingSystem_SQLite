@@ -1,12 +1,11 @@
-﻿using InvoicingSystem.Logic.Constants;
+﻿using System.Collections.Generic;
+using System.IO;
+using Invoicing.Models;
+using InvoicingSystem.Logic.Constants;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
-using System.Collections.Generic;
-using System.IO;
-using Invoicing;
-using Invoicing.Classes;
 
-namespace InvoicingSystem.Logic.ExcelCreation
+namespace InvoicingSystem_SQLite.Logic.ExcelCreation
 {
     class ExcelCreator
     {
