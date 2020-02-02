@@ -1,6 +1,7 @@
 ﻿using Invoicing.Attributes;
 using InvoicingSystem_SQLite.Logic.Extensions;
 using System.Linq;
+using Invoicing.Models;
 
 namespace InvoicingSystem_SQLite.Logic.Validators
 {
@@ -12,7 +13,7 @@ namespace InvoicingSystem_SQLite.Logic.Validators
         /// </summary>
         /// <typeparam name="T">Type of class with given property (column name).</typeparam>
         /// <param name="columnName">Name of the property, that should correspond with the column name in DB.</param>
-        public static bool ColumnExists<T>(string columnName) where T : class
+        public static bool ColumnExists<T>(string columnName) where T : IDatabaseStorableObject
         {
             var typeOfT = typeof(T);
             var property = typeOfT.GetProperties().SingleOrDefault(p => p.Name == columnName);

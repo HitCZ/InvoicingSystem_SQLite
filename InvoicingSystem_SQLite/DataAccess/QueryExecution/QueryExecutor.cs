@@ -4,6 +4,7 @@ using System.Configuration;
 using System.Data.SQLite;
 using System.Linq;
 using Dapper;
+using Invoicing.Models;
 
 namespace InvoicingSystem_SQLite.DataAccess.QueryExecution
 {
@@ -20,7 +21,7 @@ namespace InvoicingSystem_SQLite.DataAccess.QueryExecution
         /// <summary>
         /// Establishes SQLite Connection, executes passed query and returns single value.
         /// </summary>
-        public T ExecuteQueryWithSingleResult<T>(string query) where T : class
+        public T ExecuteQueryWithSingleResult<T>(string query) where T : IDatabaseStorableObject
         {
             using (var connection = new SQLiteConnection(ConnectionString))
             {
@@ -32,7 +33,7 @@ namespace InvoicingSystem_SQLite.DataAccess.QueryExecution
         /// <summary>
         /// Establishes SQLite Connection, executes passed query and returns multiple values.
         /// </summary>
-        public IEnumerable<T> ExecuteQueryWitMultipleResults<T>(string query) where T : class
+        public IEnumerable<T> ExecuteQueryWitMultipleResults<T>(string query) where T : IDatabaseStorableObject
         {
             using (var connection = new SQLiteConnection(ConnectionString))
             {

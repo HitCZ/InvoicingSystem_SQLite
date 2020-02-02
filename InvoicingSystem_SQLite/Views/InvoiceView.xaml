@@ -10,10 +10,11 @@
 
     <!--VARIABLES-->
     <Window.Resources>
-        <system:Double x:Key="minFieldWidth">100</system:Double>
-        <system:Double x:Key="txtboxCorporationNameWidth">287</system:Double>
-        <Thickness x:Key="vboxMargin" Left="10" Top="0" Right="10" Bottom="0"/>
-        <Thickness x:Key="stkMargin"  Left="0" Top="2.725" Right="0" Bottom="2.725"/>
+        <system:Double x:Key="MinFieldWidth">100</system:Double>
+
+        <Style TargetType="TextBox">
+            <Setter Property="Width" Value="200"/>
+        </Style>
     </Window.Resources>
 
     <Border BorderBrush="Black" BorderThickness="0,0,1,1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="50,50">
@@ -187,7 +188,7 @@
                     <TextBlock Grid.Row="0" Grid.Column="0" Text="Platební podmínky: " FontWeight="Bold"/>
                     <!--PAYMENT METHOD-->
                     <TextBlock Grid.Row="1" Grid.Column="0" Text="Forma úhrady: "/>
-                    <ComboBox Grid.Row="1" Grid.Column="1" MinWidth="{StaticResource minFieldWidth}" 
+                    <ComboBox Grid.Row="1" Grid.Column="1" MinWidth="{StaticResource MinFieldWidth}" 
                               HorizontalAlignment="Left"/>
                     <!--END OF PAYMENT METHOD-->
 

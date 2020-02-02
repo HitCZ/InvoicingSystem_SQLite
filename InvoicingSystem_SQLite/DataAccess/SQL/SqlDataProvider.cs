@@ -1,14 +1,18 @@
-﻿using System;
+﻿using Invoicing.Models;
 using InvoicingSystem.Logic.Extensions;
 using InvoicingSystem_SQLite.DataAccess.QueryExecution;
 using InvoicingSystem_SQLite.Logic.Exceptions;
+using InvoicingSystem_SQLite.Logic.Extensions;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using System.Linq;
+using System.Windows.Documents;
 
 namespace InvoicingSystem_SQLite.DataAccess.SQL
 {
     [Export, PartCreationPolicy(CreationPolicy.NonShared)]
-    public class SqlDataProvider<T> where T : class
+    public class SqlDataProvider<T> where T : IDatabaseStorableObject
     {
         #region Fields
 
@@ -20,7 +24,7 @@ namespace InvoicingSystem_SQLite.DataAccess.SQL
         #region Constructor
 
         [ImportingConstructor]
-        protected SqlDataProvider(IQueryExecutor queryExecutor)
+        public SqlDataProvider(IQueryExecutor queryExecutor)
         {
             this.queryExecutor = queryExecutor;
 
@@ -35,14 +39,21 @@ namespace InvoicingSystem_SQLite.DataAccess.SQL
 
         #region Virtual Methods
 
-        public int CreateOrUpdate(T item)
+        public (string query, int success) CreateOrUpdate(T item)
         {
-            throw new NotImplementedException();
+            var itemExistsInDb = item.Id.HasValue;
+            var query = itemExistsInDb ? GetUpdateQuery(item) : GetInsertQuery(item);
+
+            var result = queryExecutor.ExecuteQueryWithFeedback(query);
+
+            return (query, result);
         }
 
-        public int CreateOrUpdate(IEnumerable<T> items)
+        public List<(string query, int success)> CreateOrUpdate(IEnumerable<T> items)
         {
-            throw new NotImplementedException();
+            var result = items.Select(CreateOrUpdate).ToList();
+
+            return result;
         }
 
         public int Delete(T item)
@@ -78,5 +89,65 @@ namespace InvoicingSystem_SQLite.DataAccess.SQL
         }
 
         #endregion Virtual Methods
+
+        #region Private Methods
+
+        private string GetInsertQuery(T item)
+        {
+            var propertyInformation = GetInsertInformation(item);
+            var propertyNames = propertyInformation.Select(p => p.ColumnName);
+            var propertyValues = propertyInformation.Select(p => p.Value);
+            var joinedPropertyNames = propertyNames.JoinToStrings();
+            var joinedPropertyValues = propertyValues.JoinToStrings();
+
+            var query = $"INSERT INTO {tableName} ({joinedPropertyNames}) VALUES ({joinedPropertyValues})";
+
+            return query;
+        }
+
+        private string GetUpdateQuery(T item)
+        {
+            var properties = typeof(T).GetProperties();
+            var valueChanges = new List<string>();
+
+            for (var i = 0; i < properties.Length; i++)
+            {
+                var property = properties[i];
+                var valueChange = $"{property.Name} = {property.GetValue(item)}";
+
+                if (i < properties.Length - 1)
+                    valueChange.Append(',');
+                valueChanges.Add(valueChange);
+            }
+
+            var joinedChanges = string.Join(" ", valueChanges);
+            var query = $"UPDATE {tableName} SET {joinedChanges} WHERE {nameof(item.Id)} = {item.Id}";
+
+            return query;
+        }
+
+        private List<InsertInformation> GetInsertInformation(T item)
+        {
+            var properties = typeof(T).GetProperties();
+            var result = new List<InsertInformation>();
+
+            for (var i = 0; i < properties.Length; i++)
+            {
+                var currentProperty = properties[i];
+                var propertyName = currentProperty.Name;
+                var propertyValue = currentProperty.GetValue(item);
+
+                if (propertyValue is null)
+                    continue;
+
+                var info = new InsertInformation(i, propertyName, propertyValue);
+
+                result.Add(info);
+            }
+
+            return result;
+        }
+
+        #endregion Private Methods
     }
 }
