@@ -3,11 +3,9 @@ using InvoicingSystem.Logic.Extensions;
 using InvoicingSystem_SQLite.DataAccess.QueryExecution;
 using InvoicingSystem_SQLite.Logic.Exceptions;
 using InvoicingSystem_SQLite.Logic.Extensions;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
-using System.Windows.Documents;
 
 namespace InvoicingSystem_SQLite.DataAccess.SQL
 {
@@ -56,9 +54,28 @@ namespace InvoicingSystem_SQLite.DataAccess.SQL
             return result;
         }
 
+        /// <summary>
+        /// It doesn't make sense to return the query.
+        /// </summary>
         public int Delete(T item)
         {
-            throw new NotImplementedException();
+            var itemExistsInDb = item.Id.HasValue;
+
+            if (!itemExistsInDb)
+                return 0;
+
+            var query = $"DELETE FROM {tableName} WHERE Id = {item.Id}";
+            var result = queryExecutor.ExecuteQueryWithFeedback(query);
+
+            return result;
+        }
+
+        public List<(int index, int success)> Delete(IEnumerable<T> items)
+        {
+            var list = items.ToList();
+            var result =list.Select(Delete).Select((response, i) => (i, response)).ToList();
+            
+            return result;
         }
 
         public virtual T GetById(int id)
@@ -82,7 +99,7 @@ namespace InvoicingSystem_SQLite.DataAccess.SQL
         /// </summary>
         public virtual IEnumerable<T> GetBy(string columnName, string constraint)
         {
-            var query = $"SELECT * FROM {tableName} WHERE {columnName} LIKE {constraint}";
+            var query = $"SELECT * FROM {tableName} WHERE {columnName} LIKE \"%{constraint}%\"";
             var result = queryExecutor.ExecuteQueryWitMultipleResults<T>(query);
 
             return result;
@@ -98,7 +115,7 @@ namespace InvoicingSystem_SQLite.DataAccess.SQL
             var propertyNames = propertyInformation.Select(p => p.ColumnName);
             var propertyValues = propertyInformation.Select(p => p.Value);
             var joinedPropertyNames = propertyNames.JoinToStrings();
-            var joinedPropertyValues = propertyValues.JoinToStrings();
+            var joinedPropertyValues = propertyValues.JoinToStrings(surroundWith: ((char)34).ToString());
 
             var query = $"INSERT INTO {tableName} ({joinedPropertyNames}) VALUES ({joinedPropertyValues})";
 
