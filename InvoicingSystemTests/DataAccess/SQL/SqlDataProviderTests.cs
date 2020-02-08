@@ -1,11 +1,11 @@
-﻿using Invoicing.Models;
-using InvoicingSystem_SQLite.DataAccess.QueryExecution;
+﻿using InvoicingSystem_SQLite.DataAccess.QueryExecution;
 using InvoicingSystem_SQLite.DataAccess.SQL;
 using InvoicingSystem_SQLite.Logic.Comparers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
 using System.Collections.Generic;
+using Invoicing.Models;
 using PropertyInformation = InvoicingSystem_SQLite.DataAccess.SQL.PropertyInformation;
 // ReSharper disable UnusedAutoPropertyAccessor.Local
 
@@ -53,8 +53,8 @@ namespace InvoicingSystemTests.DataAccess.SQL
         [TestMethod]
         public void GetJoinedInsertInformationTest()
         {
-            var expectedNames = "FirstName, LastName, ZipCode";
-            var expectedValues = "\"John\", \"Doe\", \"27351\"";
+            var expectedNames = "FirstName, Id, LastName, ZipCode";
+            var expectedValues = "\"John\", \"1\", \"Doe\", \"27351\"";
 
             var actual = provider.GetJoinedInsertInformation(testModel);
             var actualNames = actual.joinedPropertyNames;
@@ -81,6 +81,14 @@ namespace InvoicingSystemTests.DataAccess.SQL
             var expected =
                 $"INSERT INTO {TABLE_NAME} (FirstName, LastName, ZipCode) VALUES (\"John\", \"Doe\", \"27351\")";
             var actual = provider.GetInsertQuery(testModel);
+            
+            if (testModel.Id.HasValue)
+            {
+                var indexInNames = expected.IndexOf("LastName", StringComparison.Ordinal);
+                expected = expected.Insert(indexInNames, "Id, ");
+                var indexInValues = expected.IndexOf("Doe", StringComparison.Ordinal) - 2;
+                expected = expected.Insert(indexInValues, " \"1\",");
+            }
 
             Assert.AreEqual(expected, actual);
         }
@@ -111,13 +119,26 @@ namespace InvoicingSystemTests.DataAccess.SQL
             Assert.IsTrue(areEqual);
         }
 
+        [TestMethod]
+        public void GetAllConstraintsExceptIdTest()
+        {
+            var expected = new List<string> { "FirstName = \"John\"", "AND", "LastName = \"Doe\"", "AND", "ZipCode = \"27351\"" };
+            var actual = provider.GetAllConstraintsExceptId(
+                new List<string> { "FirstName", "LastName", "ZipCode" },
+                new List<object> { "John", "Doe", (uint)27351 });
+            
+            var areEqual = enumerableStringComparer.Compare(expected, actual) == 0;
+
+            Assert.IsTrue(areEqual);
+        }
+
         #endregion Test Methods
 
-        #region TestDataProvider
+        #region Helper classes
 
         private class TestDataProvider : SqlDataProvider<TestModel>
         {
-            public TestDataProvider(IQueryExecutor queryExecutor, ITypeToTableMappingManager typeToTableMappingManager) 
+            public TestDataProvider(IQueryExecutor queryExecutor, ITypeToTableMappingManager typeToTableMappingManager)
                 : base(queryExecutor, typeToTableMappingManager)
             {
             }
@@ -135,11 +156,12 @@ namespace InvoicingSystemTests.DataAccess.SQL
             public new string GetUpdateQuery(TestModel item) => base.GetUpdateQuery(item);
 
             public new List<PropertyInformation> GetPropertiesInformation(TestModel item) => base.GetPropertiesInformation(item);
+
+            public new List<string> GetAllConstraintsExceptId(List<string> propertyNames, List<object> propertyValues)
+            {
+                return base.GetAllConstraintsExceptId(propertyNames, propertyValues);
+            }
         }
-
-        #endregion TestDataProvider
-
-        #region TestModel
 
         private class TestModel : ModelBase
         {
@@ -152,6 +174,6 @@ namespace InvoicingSystemTests.DataAccess.SQL
             }
         }
 
-        #endregion  TestModel
+        #endregion Helper classes
     }
 }

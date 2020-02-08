@@ -39,12 +39,9 @@ namespace InvoicingSystem_SQLite.DataAccess.SQL
         {
             var changes = base.GetJoinedChangesForUpdate(item).ToList();
 
-            if (changes.Any())
-                changes.Add(VALUE_SEPARATOR);
-
-            changes.Add($"{VALUE_SEPARATOR}Id{nameof(BankInformation)} = {item.BankInformation.Id}");
-            changes.Add($"{VALUE_SEPARATOR}Id{nameof(Customer)} = {item.Customer.Id}");
-            changes.Add($"{VALUE_SEPARATOR}Id{nameof(Contractor)} = {item.Contractor.Id}");
+            changes.Add($"Id{nameof(BankInformation)} = \"{item.BankInformation.Id}\"");
+            changes.Add($"Id{nameof(Contractor)} = \"{item.Contractor.Id}\"");
+            changes.Add($"Id{nameof(Customer)} = \"{item.Customer.Id}\"");
 
             return changes;
         }
@@ -59,15 +56,15 @@ namespace InvoicingSystem_SQLite.DataAccess.SQL
                 namesBuilder.Append(VALUE_SEPARATOR);
 
             namesBuilder.Append($"Id{nameof(Invoice.BankInformation)}");
-            namesBuilder.Append($"{VALUE_SEPARATOR}Id{nameof(Invoice.Customer)}");
             namesBuilder.Append($"{VALUE_SEPARATOR}Id{nameof(Invoice.Contractor)}");
+            namesBuilder.Append($"{VALUE_SEPARATOR}Id{nameof(Invoice.Customer)}");
 
             if (valuesBuilder.Length > 0)
                 valuesBuilder.Append(VALUE_SEPARATOR);
 
             valuesBuilder.Append($"\"{item.BankInformation.Id}\"");
-            valuesBuilder.Append($"{VALUE_SEPARATOR}\"{item.Customer.Id}\"");
             valuesBuilder.Append($"{VALUE_SEPARATOR}\"{item.Contractor.Id}\"");
+            valuesBuilder.Append($"{VALUE_SEPARATOR}\"{item.Customer.Id}\"");
 
             return (namesBuilder.ToString(), valuesBuilder.ToString());
         }

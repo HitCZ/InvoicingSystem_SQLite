@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
@@ -20,7 +21,10 @@ namespace InvoicingSystem_SQLite.Logic.Extensions
                 if (!(surroundWith is null))
                     builder.Append(surroundWith);
 
-                builder.Append(currentItem);
+                if (currentItem is DateTime date)
+                    builder.Append(date.ToString("dd.MM.yyyy"));
+                else
+                    builder.Append(currentItem);
 
                 if (!(surroundWith is null))
                     builder.Append(surroundWith);

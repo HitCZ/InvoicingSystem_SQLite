@@ -70,6 +70,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataAccess\SQL\InvoiceDataProviderTests.cs" />
     <Compile Include="DataAccess\SQL\SqlDataProviderTests.cs" />
     <Compile Include="Extensions\PropertyInfoExtensionsTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

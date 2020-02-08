@@ -1,4 +1,5 @@
-﻿using Invoicing.Models;
+﻿using Invoicing.Attributes;
+using Invoicing.Models;
 using InvoicingSystem.Logic.Extensions;
 using InvoicingSystem_SQLite.DataAccess.QueryExecution;
 using InvoicingSystem_SQLite.Logic.Exceptions;
@@ -119,27 +120,13 @@ namespace InvoicingSystem_SQLite.DataAccess.SQL
             var propertyInformation = GetPropertiesInformation(item);
             var propertyNames = propertyInformation.Select(p => p.ColumnName).ToList();
             var propertyValues = propertyInformation.Select(p => p.Value).ToList();
-            var constraints = new List<string>();
-            var constraintBuilder = new StringBuilder();
 
             if (propertyNames.Count != propertyValues.Count)
                 throw new InvalidPropertyInformationException(
                     $"The count of {nameof(propertyNames)}({propertyNames.Count}) " +
                         $"doesn't match the count of {nameof(propertyValues)}({propertyValues.Count}).");
 
-            for (var i = 0; i < propertyNames.Count; i++)
-            {
-                var name = propertyNames[i];
-                var value = propertyValues[i];
-
-                constraintBuilder.Append($"{name} = \"{value}\"");
-
-                if (i < propertyNames.Count - 1)
-                    constraintBuilder.Append("AND");
-
-                constraints.Add(constraintBuilder.ToString());
-                constraintBuilder.Clear();
-            }
+            var constraints = GetAllConstraintsExceptId(propertyNames, propertyValues);
 
             var joinedConstraints = constraints.JoinToStrings(" ");
             var query = $"SELECT * FROM {tableName} WHERE {joinedConstraints}";
@@ -154,34 +141,45 @@ namespace InvoicingSystem_SQLite.DataAccess.SQL
 
         protected virtual (string joinedPropertyNames, string joinedPropertyValues) GetJoinedInsertInformation(T item)
         {
-            var propertyInformation = GetPropertiesInformation(item);
+            var propertyInformation = GetPropertiesInformation(item).OrderBy(p => p.ColumnName).ToList();
             var propertyNames = propertyInformation.Select(p => p.ColumnName);
             var propertyValues = propertyInformation.Select(p => p.Value);
 
             var joinedPropertyNames = propertyNames.JoinToStrings();
-            var joinedPropertyValues = propertyValues.JoinToStrings(surroundWith: ((char) 34).ToString());
+            var joinedPropertyValues = propertyValues.JoinToStrings(surroundWith: ((char)34).ToString());
 
             return (joinedPropertyNames, joinedPropertyValues);
         }
-            
+
         /// <summary>
-        /// Returns strings in format "PropertyName = value" (e.g. FirstName = "John")
+        /// Returns strings in format "PropertyName = value" (e.g. FirstName = "John"), without ID.
         /// </summary>
         protected virtual IEnumerable<string> GetJoinedChangesForUpdate(T item)
         {
-            var properties = typeof(T).GetProperties();
+            var properties = typeof(T).GetProperties().OrderBy(p => p.Name).ToList();
             var valueChanges = new List<string>();
 
-            for (var i = 0; i < properties.Length; i++)
+            for (var i = 0; i < properties.Count; i++)
             {
                 var property = properties[i];
+
+                if (property.HasAttribute<NotInDatabaseAttribute>())
+                    continue;
+                if (typeof(IDatabaseStorableObject).IsAssignableFrom(property.PropertyType))
+                    continue;
 
                 if (property.Name.Equals("id", StringComparison.InvariantCultureIgnoreCase))
                     continue;
 
-                var valueChange = $"{property.Name} = \"{property.GetValue(item)}\"";
+                var propertyName = property.Name;
+                var propertyValue = property.GetValue(item);
 
-                if (i < properties.Length - 1)
+                if (propertyValue is DateTime date)
+                    propertyValue = date.ToString("dd.MM.yyyy");
+
+                var valueChange = $"{propertyName} = \"{propertyValue}\"";
+
+                if (i < properties.Count - 1)
                     valueChange.Append(',');
                 valueChanges.Add(valueChange);
             }
@@ -192,6 +190,27 @@ namespace InvoicingSystem_SQLite.DataAccess.SQL
         #endregion Virtual Methods
 
         #region Protected Methods
+
+        protected List<string> GetAllConstraintsExceptId(List<string> propertyNames, List<object> propertyValues)
+        {
+            var constraintBuilder = new StringBuilder();
+            var constraints = new List<string>();
+
+            for (var i = 0; i < propertyNames.Count; i++)
+            {
+                var name = propertyNames[i];
+                var value = propertyValues[i];
+
+                constraintBuilder.Append($"{name} = \"{value}\"");
+                constraints.Add(constraintBuilder.ToString());
+                constraintBuilder.Clear();
+
+                if (i < propertyNames.Count - 1)
+                    constraints.Add("AND");
+            }
+
+            return constraints;
+        }
 
         protected string GetInsertQuery(T item)
         {
@@ -225,7 +244,7 @@ namespace InvoicingSystem_SQLite.DataAccess.SQL
             {
                 var propertyType = currentProperty.PropertyType;
 
-                if (propertyType == typeof(IDatabaseStorableObject))
+                if ((typeof(IDatabaseStorableObject).IsAssignableFrom(propertyType)))
                     continue;
 
                 var propertyName = currentProperty.Name;
