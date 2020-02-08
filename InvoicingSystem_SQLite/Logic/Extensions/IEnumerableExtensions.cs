@@ -18,6 +18,7 @@ namespace InvoicingSystem_SQLite.Logic.Extensions
 
                 if (currentItem is null)
                     continue;
+
                 if (!(surroundWith is null))
                     builder.Append(surroundWith);
 

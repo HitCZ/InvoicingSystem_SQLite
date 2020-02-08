@@ -130,7 +130,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Logic\Constants\Strings.cs" />
-    <Compile Include="Logic\Enumerations\Direction.cs" />
     <Compile Include="Logic\Enumerations\PaymentMethod.cs" />
     <Compile Include="Logic\ExcelCreation\ExcelCreator.cs" />
     <Compile Include="Logic\Extensions\StringExtension.cs" />
