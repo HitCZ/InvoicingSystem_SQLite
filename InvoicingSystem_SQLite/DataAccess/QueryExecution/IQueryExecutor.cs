@@ -8,7 +8,7 @@ namespace InvoicingSystem_SQLite.DataAccess.QueryExecution
         string ConnectionString { get; }
         T ExecuteQueryWithSingleResult<T>(string query) where T : IDatabaseStorableObject;
         IEnumerable<T> ExecuteQueryWitMultipleResults<T>(string query) where T : IDatabaseStorableObject;
-        int ExecuteQueryWithFeedback(string query);
-        int ExecuteMultipleQueriesWithFeedback(List<string> queries);
+        bool ExecuteQueryWithFeedback(string query);
+        bool ExecuteMultipleQueriesWithFeedback(List<string> queries);
     }
 }

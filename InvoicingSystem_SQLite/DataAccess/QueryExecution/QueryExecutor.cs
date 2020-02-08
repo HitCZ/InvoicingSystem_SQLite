@@ -45,33 +45,23 @@ namespace InvoicingSystem_SQLite.DataAccess.QueryExecution
         /// <summary>
         /// Establishes SQLite Connection, executes passed query and returns number indicating success (0 - fail/1 - success)..
         /// </summary>
-        public int ExecuteQueryWithFeedback(string query)
+        public bool ExecuteQueryWithFeedback(string query)
         {
             using (var connection = new SQLiteConnection(ConnectionString))
             {
                 var response = connection.Execute(query);
-                return response;
+                return response == 1;
             }
         }
 
         /// <summary>
         /// Establishes SQLite Connection, executes passed queries and returns number indicating success (0 - fail/1 - success)..
         /// </summary>
-        public int ExecuteMultipleQueriesWithFeedback(List<string> queries)
+        public bool ExecuteMultipleQueriesWithFeedback(List<string> queries)
         {
             using (var connection = new SQLiteConnection(ConnectionString))
             {
-                var response = -1;
-
-                foreach (var query in queries)
-                {
-                    response = connection.Execute(query);
-
-                    if (response != 1)
-                        return response;
-                }
-
-                return response;
+                return queries.Select(query => connection.Execute(query)).All(success => success == 1);
             }
         }
     }

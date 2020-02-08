@@ -47,8 +47,7 @@ namespace InvoicingSystem_SQLite.DataAccess.SQL
             var itemExistsInDb = item.Id.HasValue;
             var query = itemExistsInDb ? GetUpdateQuery(item) : GetInsertQuery(item);
 
-            var result = queryExecutor.ExecuteQueryWithFeedback(query);
-            var success = result == 0;
+            var success = queryExecutor.ExecuteQueryWithFeedback(query);
 
             return (query, success);
         }
@@ -71,9 +70,9 @@ namespace InvoicingSystem_SQLite.DataAccess.SQL
                 return false;
 
             var query = $"DELETE FROM {tableName} WHERE Id = {item.Id}";
-            var result = queryExecutor.ExecuteQueryWithFeedback(query);
+            var success = queryExecutor.ExecuteQueryWithFeedback(query);
 
-            return result == 0;
+            return success;
         }
 
         public List<(int index, bool success)> Delete(IEnumerable<T> items)
