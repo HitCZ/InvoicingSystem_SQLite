@@ -14,7 +14,8 @@ namespace InvoicingSystem_SQLite.DataAccess.SQL
         private readonly SqlDataProvider<Customer> customerProvider;
         private readonly SqlDataProvider<Contractor> contractorProvider;
 
-        public InvoiceDataProvider(IQueryExecutor queryExecutor) : base(queryExecutor)
+        public InvoiceDataProvider(IQueryExecutor queryExecutor, ITypeToTableMappingManager typeToTableMappingManager) 
+            : base(queryExecutor, typeToTableMappingManager)
         {
             bankInformationProvider = SqlProviderFactory<BankInformation>.GetProvider();
             customerProvider = SqlProviderFactory<Customer>.GetProvider();

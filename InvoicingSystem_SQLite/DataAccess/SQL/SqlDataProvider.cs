@@ -3,6 +3,7 @@ using InvoicingSystem.Logic.Extensions;
 using InvoicingSystem_SQLite.DataAccess.QueryExecution;
 using InvoicingSystem_SQLite.Logic.Exceptions;
 using InvoicingSystem_SQLite.Logic.Extensions;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
@@ -16,6 +17,7 @@ namespace InvoicingSystem_SQLite.DataAccess.SQL
         #region Fields
 
         protected readonly IQueryExecutor queryExecutor;
+        protected readonly ITypeToTableMappingManager typeToTableMappingManager;
         protected readonly string tableName;
 
         #endregion Fields
@@ -23,12 +25,13 @@ namespace InvoicingSystem_SQLite.DataAccess.SQL
         #region Constructor
 
         [ImportingConstructor]
-        public SqlDataProvider(IQueryExecutor queryExecutor)
+        public SqlDataProvider(IQueryExecutor queryExecutor, ITypeToTableMappingManager typeToTableMappingManager)
         {
             this.queryExecutor = queryExecutor;
+            this.typeToTableMappingManager = typeToTableMappingManager;
 
             var typeOfT = typeof(T);
-            tableName = TypeToTableMappingManager.GetTableNameByType(typeOfT);
+            tableName = typeToTableMappingManager.GetTableNameByType(typeOfT);
 
             if (tableName.IsNullOrEmpty())
                 throw new TableNotFoundException(typeOfT);
@@ -172,6 +175,10 @@ namespace InvoicingSystem_SQLite.DataAccess.SQL
             for (var i = 0; i < properties.Length; i++)
             {
                 var property = properties[i];
+
+                if (property.Name.Equals("id", StringComparison.InvariantCultureIgnoreCase))
+                    continue;
+
                 var valueChange = $"{property.Name} = \"{property.GetValue(item)}\"";
 
                 if (i < properties.Length - 1)
@@ -199,7 +206,7 @@ namespace InvoicingSystem_SQLite.DataAccess.SQL
         {
             var valueChanges = GetJoinedChangesForUpdate(item);
 
-            var joinedChanges = string.Join(" ", valueChanges);
+            var joinedChanges = valueChanges.JoinToStrings();//string.Join(" ", valueChanges);
             var query = $"UPDATE {tableName} SET {joinedChanges} WHERE {nameof(item.Id)} = {item.Id}";
 
             return query;
@@ -214,9 +221,8 @@ namespace InvoicingSystem_SQLite.DataAccess.SQL
             var properties = typeof(T).GetProperties();
             var result = new List<PropertyInformation>();
 
-            for (var i = 0; i < properties.Length; i++)
+            foreach (var currentProperty in properties)
             {
-                var currentProperty = properties[i];
                 var propertyType = currentProperty.PropertyType;
 
                 if (propertyType == typeof(IDatabaseStorableObject))
@@ -228,7 +234,7 @@ namespace InvoicingSystem_SQLite.DataAccess.SQL
                 if (propertyValue is null)
                     continue;
 
-                var info = new PropertyInformation(i, propertyName, propertyValue);
+                var info = new PropertyInformation(propertyName, propertyValue);
 
                 result.Add(info);
             }

@@ -1,15 +1,17 @@
-﻿using System;
+﻿using Invoicing.Models;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using Invoicing.Models;
+using System.ComponentModel.Composition;
 
 namespace InvoicingSystem_SQLite.DataAccess.SQL
 {
-    public static class TypeToTableMappingManager
+    [Export(typeof(ITypeToTableMappingManager)), PartCreationPolicy(CreationPolicy.Shared)]
+    public class TypeToTableMappingManager : ITypeToTableMappingManager
     {
-        private static readonly IReadOnlyDictionary<Type, string> typesTables;
+        private readonly IReadOnlyDictionary<Type, string> typesTables;
 
-        static TypeToTableMappingManager()
+        public TypeToTableMappingManager()
         {
             typesTables = new ReadOnlyDictionary<Type, string>(new Dictionary<Type, string>
             {
@@ -21,7 +23,7 @@ namespace InvoicingSystem_SQLite.DataAccess.SQL
             });
         }
 
-        public static string GetTableNameByType(Type type)
+        public string GetTableNameByType(Type type)
         {
             var nameFound = typesTables.TryGetValue(type, out var tableName);
 

@@ -103,12 +103,15 @@
     </ApplicationDefinition>
     <Compile Include="DataAccess\QueryExecution\QueryExecutor.cs" />
     <Compile Include="DataAccess\QueryExecution\IQueryExecutor.cs" />
-    <Compile Include="DataAccess\SQL\AddressSqlProvider.cs" />
+    <Compile Include="DataAccess\SQL\ITypeToTableMappingManager.cs" />
     <Compile Include="DataAccess\SQL\PropertyInformation.cs" />
     <Compile Include="DataAccess\SQL\InvoiceDataProvider.cs" />
     <Compile Include="DataAccess\SQL\SqlDataProvider.cs" />
     <Compile Include="DataAccess\SQL\SqlProviderFactory.cs" />
     <Compile Include="DataAccess\SQL\TypeToTableMappingManager.cs" />
+    <Compile Include="Logic\Comparers\EnumerablePropertyInformationOrderIndependentComparer.cs" />
+    <Compile Include="Logic\Comparers\EnumerableStringComparer.cs" />
+    <Compile Include="Logic\Comparers\PropertyInformationComparer.cs" />
     <Compile Include="Logic\Exceptions\InvalidPropertyInformationException.cs" />
     <Compile Include="Logic\Exceptions\TableNotFoundException.cs" />
     <Compile Include="Logic\Extensions\IEnumerableExtensions.cs" />
