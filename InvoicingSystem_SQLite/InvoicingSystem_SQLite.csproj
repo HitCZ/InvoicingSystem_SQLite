@@ -104,10 +104,12 @@
     <Compile Include="DataAccess\QueryExecution\QueryExecutor.cs" />
     <Compile Include="DataAccess\QueryExecution\IQueryExecutor.cs" />
     <Compile Include="DataAccess\SQL\AddressSqlProvider.cs" />
-    <Compile Include="DataAccess\SQL\InsertInformation.cs" />
+    <Compile Include="DataAccess\SQL\PropertyInformation.cs" />
+    <Compile Include="DataAccess\SQL\InvoiceDataProvider.cs" />
     <Compile Include="DataAccess\SQL\SqlDataProvider.cs" />
     <Compile Include="DataAccess\SQL\SqlProviderFactory.cs" />
     <Compile Include="DataAccess\SQL\TypeToTableMappingManager.cs" />
+    <Compile Include="Logic\Exceptions\InvalidPropertyInformationException.cs" />
     <Compile Include="Logic\Exceptions\TableNotFoundException.cs" />
     <Compile Include="Logic\Extensions\IEnumerableExtensions.cs" />
     <Compile Include="Logic\Extensions\PropertyInfoExtensions.cs" />

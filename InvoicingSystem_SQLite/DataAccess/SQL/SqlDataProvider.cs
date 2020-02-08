@@ -6,6 +6,7 @@ using InvoicingSystem_SQLite.Logic.Extensions;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
+using System.Text;
 
 namespace InvoicingSystem_SQLite.DataAccess.SQL
 {
@@ -35,19 +36,20 @@ namespace InvoicingSystem_SQLite.DataAccess.SQL
 
         #endregion Constructor
 
-        #region Virtual Methods
+        #region Public Methods
 
-        public (string query, int success) CreateOrUpdate(T item)
+        public virtual (string query, bool success) CreateOrUpdate(T item)
         {
             var itemExistsInDb = item.Id.HasValue;
             var query = itemExistsInDb ? GetUpdateQuery(item) : GetInsertQuery(item);
 
             var result = queryExecutor.ExecuteQueryWithFeedback(query);
+            var success = result == 0;
 
-            return (query, result);
+            return (query, success);
         }
 
-        public List<(string query, int success)> CreateOrUpdate(IEnumerable<T> items)
+        public List<(string query, bool success)> CreateOrUpdate(IEnumerable<T> items)
         {
             var result = items.Select(CreateOrUpdate).ToList();
 
@@ -57,28 +59,28 @@ namespace InvoicingSystem_SQLite.DataAccess.SQL
         /// <summary>
         /// It doesn't make sense to return the query.
         /// </summary>
-        public int Delete(T item)
+        public bool Delete(T item)
         {
             var itemExistsInDb = item.Id.HasValue;
 
             if (!itemExistsInDb)
-                return 0;
+                return false;
 
             var query = $"DELETE FROM {tableName} WHERE Id = {item.Id}";
             var result = queryExecutor.ExecuteQueryWithFeedback(query);
 
-            return result;
+            return result == 0;
         }
 
-        public List<(int index, int success)> Delete(IEnumerable<T> items)
+        public List<(int index, bool success)> Delete(IEnumerable<T> items)
         {
             var list = items.ToList();
-            var result =list.Select(Delete).Select((response, i) => (i, response)).ToList();
-            
+            var result = list.Select(Delete).Select((response, i) => (i, response)).ToList();
+
             return result;
         }
 
-        public virtual T GetById(int id)
+        public T GetById(int id)
         {
             var query = $"SELECT * FROM {tableName} WHERE Id={id}";
             var result = queryExecutor.ExecuteQueryWithSingleResult<T>(query);
@@ -86,7 +88,7 @@ namespace InvoicingSystem_SQLite.DataAccess.SQL
             return result;
         }
 
-        public virtual IEnumerable<T> GetAll()
+        public IEnumerable<T> GetAll()
         {
             var query = $"SELECT * FROM {tableName}";
             var result = queryExecutor.ExecuteQueryWitMultipleResults<T>(query);
@@ -97,7 +99,7 @@ namespace InvoicingSystem_SQLite.DataAccess.SQL
         /// <summary>
         /// Column name in database should be the same as name of the Property of given type.
         /// </summary>
-        public virtual IEnumerable<T> GetBy(string columnName, string constraint)
+        public IEnumerable<T> GetBy(string columnName, string constraint)
         {
             var query = $"SELECT * FROM {tableName} WHERE {columnName} LIKE \"%{constraint}%\"";
             var result = queryExecutor.ExecuteQueryWitMultipleResults<T>(query);
@@ -105,24 +107,64 @@ namespace InvoicingSystem_SQLite.DataAccess.SQL
             return result;
         }
 
-        #endregion Virtual Methods
-
-        #region Private Methods
-
-        private string GetInsertQuery(T item)
+        /// <summary>
+        /// This is used to get a newly created db object and get its new ID.
+        /// </summary>
+        public IEnumerable<T> GetByEverythingExceptId(T item)
         {
-            var propertyInformation = GetInsertInformation(item);
-            var propertyNames = propertyInformation.Select(p => p.ColumnName);
-            var propertyValues = propertyInformation.Select(p => p.Value);
-            var joinedPropertyNames = propertyNames.JoinToStrings();
-            var joinedPropertyValues = propertyValues.JoinToStrings(surroundWith: ((char)34).ToString());
+            // Shouldn't contain ID, since it is null
+            var propertyInformation = GetPropertiesInformation(item);
+            var propertyNames = propertyInformation.Select(p => p.ColumnName).ToList();
+            var propertyValues = propertyInformation.Select(p => p.Value).ToList();
+            var constraints = new List<string>();
+            var constraintBuilder = new StringBuilder();
 
-            var query = $"INSERT INTO {tableName} ({joinedPropertyNames}) VALUES ({joinedPropertyValues})";
+            if (propertyNames.Count != propertyValues.Count)
+                throw new InvalidPropertyInformationException(
+                    $"The count of {nameof(propertyNames)}({propertyNames.Count}) " +
+                        $"doesn't match the count of {nameof(propertyValues)}({propertyValues.Count}).");
 
-            return query;
+            for (var i = 0; i < propertyNames.Count; i++)
+            {
+                var name = propertyNames[i];
+                var value = propertyValues[i];
+
+                constraintBuilder.Append($"{name} = \"{value}\"");
+
+                if (i < propertyNames.Count - 1)
+                    constraintBuilder.Append("AND");
+
+                constraints.Add(constraintBuilder.ToString());
+                constraintBuilder.Clear();
+            }
+
+            var joinedConstraints = constraints.JoinToStrings(" ");
+            var query = $"SELECT * FROM {tableName} WHERE {joinedConstraints}";
+            var result = queryExecutor.ExecuteQueryWitMultipleResults<T>(query);
+
+            return result;
         }
 
-        private string GetUpdateQuery(T item)
+        #endregion Public Methods
+
+        #region Virtual Methods
+
+        protected virtual (string joinedPropertyNames, string joinedPropertyValues) GetJoinedInsertInformation(T item)
+        {
+            var propertyInformation = GetPropertiesInformation(item);
+            var propertyNames = propertyInformation.Select(p => p.ColumnName);
+            var propertyValues = propertyInformation.Select(p => p.Value);
+
+            var joinedPropertyNames = propertyNames.JoinToStrings();
+            var joinedPropertyValues = propertyValues.JoinToStrings(surroundWith: ((char) 34).ToString());
+
+            return (joinedPropertyNames, joinedPropertyValues);
+        }
+            
+        /// <summary>
+        /// Returns strings in format "PropertyName = value" (e.g. FirstName = "John")
+        /// </summary>
+        protected virtual IEnumerable<string> GetJoinedChangesForUpdate(T item)
         {
             var properties = typeof(T).GetProperties();
             var valueChanges = new List<string>();
@@ -130,12 +172,32 @@ namespace InvoicingSystem_SQLite.DataAccess.SQL
             for (var i = 0; i < properties.Length; i++)
             {
                 var property = properties[i];
-                var valueChange = $"{property.Name} = {property.GetValue(item)}";
+                var valueChange = $"{property.Name} = \"{property.GetValue(item)}\"";
 
                 if (i < properties.Length - 1)
                     valueChange.Append(',');
                 valueChanges.Add(valueChange);
             }
+
+            return valueChanges;
+        }
+
+        #endregion Virtual Methods
+
+        #region Protected Methods
+
+        protected string GetInsertQuery(T item)
+        {
+            var joinedInsertInformation = GetJoinedInsertInformation(item);
+
+            var query = $"INSERT INTO {tableName} ({joinedInsertInformation.joinedPropertyNames}) VALUES ({joinedInsertInformation.joinedPropertyValues})";
+
+            return query;
+        }
+
+        protected string GetUpdateQuery(T item)
+        {
+            var valueChanges = GetJoinedChangesForUpdate(item);
 
             var joinedChanges = string.Join(" ", valueChanges);
             var query = $"UPDATE {tableName} SET {joinedChanges} WHERE {nameof(item.Id)} = {item.Id}";
@@ -143,21 +205,30 @@ namespace InvoicingSystem_SQLite.DataAccess.SQL
             return query;
         }
 
-        private List<InsertInformation> GetInsertInformation(T item)
+        /// <summary>
+        /// Returns collection of property indexes, names and values, of all properties, except <see cref="IDatabaseStorableObject"/>.
+        /// When property value is null, it is not included within the list.
+        /// </summary>
+        protected List<PropertyInformation> GetPropertiesInformation(T item)
         {
             var properties = typeof(T).GetProperties();
-            var result = new List<InsertInformation>();
+            var result = new List<PropertyInformation>();
 
             for (var i = 0; i < properties.Length; i++)
             {
                 var currentProperty = properties[i];
+                var propertyType = currentProperty.PropertyType;
+
+                if (propertyType == typeof(IDatabaseStorableObject))
+                    continue;
+
                 var propertyName = currentProperty.Name;
                 var propertyValue = currentProperty.GetValue(item);
 
                 if (propertyValue is null)
                     continue;
 
-                var info = new InsertInformation(i, propertyName, propertyValue);
+                var info = new PropertyInformation(i, propertyName, propertyValue);
 
                 result.Add(info);
             }
@@ -165,6 +236,6 @@ namespace InvoicingSystem_SQLite.DataAccess.SQL
             return result;
         }
 
-        #endregion Private Methods
+        #endregion Protected Methods
     }
 }
