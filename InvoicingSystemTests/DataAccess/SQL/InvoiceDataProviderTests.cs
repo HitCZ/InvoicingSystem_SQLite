@@ -71,9 +71,9 @@ namespace InvoicingSystemTests.DataAccess.SQL
         [TestMethod]
         public void GetJoinedInsertInformationTest()
         {
-            var expectedNames = "DateOfIssue, DueDate, InvoiceNumber, JobDescription, PaymentMethod, Price, " +
+            var expectedNames = "Currency, DateOfIssue, DueDate, InvoiceNumber, JobDescription, PaymentMethod, Price, " +
                                 "IdBankInformation, IdContractor, IdCustomer";
-            var expectedValues = $"\"08.02.2020\", \"10.02.2020\", \"20200001\", \"{JOB_DESCRIPTION}\", " +
+            var expectedValues = $"\"CZK\", \"08.02.2020\", \"10.02.2020\", \"20200001\", \"{JOB_DESCRIPTION}\", " +
                                  $"\"{PaymentMethod.BankTransfer}\", \"30000\", \"2\", \"3\", \"4\"";
 
             if (invoice.Id.HasValue)
@@ -97,6 +97,7 @@ namespace InvoicingSystemTests.DataAccess.SQL
         {
             var expected = new List<string>
             {
+                "Currency = \"CZK\"",
                 "DateOfIssue = \"08.02.2020\"", 
                 "DueDate = \"10.02.2020\"",
                 "InvoiceNumber = \"20200001\"",

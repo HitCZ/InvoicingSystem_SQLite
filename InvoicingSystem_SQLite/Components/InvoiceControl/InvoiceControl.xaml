@@ -7,12 +7,12 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate>
-                    <Border BorderThickness="0,0,1,1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="50,50">
-                        <Grid ShowGridLines="False" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                    <Border BorderThickness="0,0,1,1" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="50,50">
+                        <Grid ShowGridLines="False" HorizontalAlignment="Stretch" VerticalAlignment="Top">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="*"/>
-                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
@@ -26,8 +26,8 @@
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                                     <TextBlock Text="{Binding Source={x:Static properties:Strings.InvoiceNumber}, StringFormat={}{0}:}" 
                                                Margin="0" />
-                                    <TextBox Text="{Binding InvoiceNumber}" MaxWidth="70" Margin="5,0" 
-                                             HorizontalContentAlignment="Right"/>
+                                    <TextBox Text="{Binding InvoiceNumber}" Width="100"  Margin="5,0" 
+                                             />
                                 </StackPanel>
                             </Border>
 
@@ -94,13 +94,14 @@
                                     <!--CONTRACTOR VAT PAYER-->
                                     <TextBlock Grid.Row="7" Grid.Column="0"
                                                Text="{Binding Source={x:Static properties:Strings.VatPayer}, StringFormat={}{0}:}"/>
-                                    <CheckBox Grid.Row="7" Grid.Column="1" IsChecked="True"/>
+                                    <CheckBox Grid.Row="7" Grid.Column="1" IsChecked="True" Margin="0,5,0,0"/>
 
                                     <!--CONTRACTOR CITY OF EVIDENCE-->
-                                    <TextBlock Grid.Row="8" Grid.Column="0" 
+                                    <TextBlock Grid.Row="8" Grid.Column="0"
                                                Text="{Binding Source={x:Static properties:Strings.CityOfEvidence}, StringFormat={}{0}:}"/>
                                     <TextBox Grid.Row="8" Grid.Column="1" 
-                                             Text="{Binding CityOfEvidence, ValidatesOnDataErrors=True}"/>
+                                             Text="{Binding CityOfEvidence, ValidatesOnDataErrors=True}"
+                                             Margin="0,5,0,20"/>
                                 </Grid>
                             </Border>
                             <!--#endregion Contractor-->
@@ -120,8 +121,8 @@
                                         <RowDefinition Height="Auto"/>
                                     </Grid.RowDefinitions>
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto"/>
-                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
                                     </Grid.ColumnDefinitions>
 
                                     <TextBlock Grid.Row="0" Grid.Column="0" 
@@ -196,7 +197,7 @@
                                     <!--PAYMENT METHOD-->
                                     <TextBlock Grid.Row="1" Grid.Column="0" 
                                                Text="{Binding Source={x:Static properties:Strings.PaymentMethod}, StringFormat={}{0}:}"/>
-                                    <ComboBox Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" 
+                                    <ComboBox Grid.Row="1" Grid.Column="1" 
                                               ItemsSource="{Binding PaymentMethods}"
                                               SelectedValue="{Binding SelectedPaymentMethod}"
                                               SelectedValuePath="Value"
@@ -235,62 +236,71 @@
                                         <ColumnDefinition Width="*"/>
                                     </Grid.ColumnDefinitions>
 
-                                    <TextBlock Grid.Row="0" Grid.Column="0" 
+                                    <TextBlock Grid.Row="0" Grid.Column="0" Margin="0,30"
                                                Text="{Binding Source={x:Static properties:Strings.DateOfIssue}, StringFormat={}{0}:}"/>
-                                    <DatePicker Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left"
-                                                SelectedDate="{Binding SelectedDateOfIssue}" />
+                                    <DatePicker Grid.Row="0" Grid.Column="1"
+                                                SelectedDate="{Binding SelectedDateOfIssue}" 
+                                                Margin="0,10" />
 
-                                    <TextBlock Grid.Row="1" Grid.Column="0" 
+                                    <TextBlock Grid.Row="1" Grid.Column="0" Margin="0,15"
                                                Text="{Binding Source={x:Static properties:Strings.DueDate}, StringFormat={}{0}:}"/>
-                                    <DatePicker Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left"/>
+                                    <DatePicker Grid.Row="1" Grid.Column="1"/>
                                 </Grid>
                             </Border>
 
                             <Border Grid.Column="0" Grid.Row="3"
                     HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderThickness="1,0,1,1" Padding="10,10,10,2">
-
-                                <Grid  HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="*"/>
-                                    </Grid.RowDefinitions>
-
-                                    <TextBlock Grid.Row="0" 
+                                <DockPanel  HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                                    <TextBlock DockPanel.Dock="Top" 
                                                Text="{Binding Source={x:Static properties:Strings.JobDescription}, StringFormat={}{0}:}" 
                                                FontWeight="Bold"/>
 
-                                    <TextBox Grid.Row="1" 
+                                    <TextBox DockPanel.Dock="Bottom"
                                              VerticalScrollBarVisibility="Auto" 
-                                             Margin="0"
                                              AcceptsReturn="True" 
                                              AcceptsTab="True" 
                                              TextWrapping="Wrap" 
-                                             HorizontalAlignment="Stretch" 
-                                             VerticalAlignment="Stretch" 
+                                             VerticalAlignment="Stretch"
+                                             HorizontalAlignment="Stretch"
                                              MinHeight="150" 
-                                             x:Name="JobDescriptionTxt"
                                              Text="{Binding JobDescription, ValidatesOnDataErrors=True}"/>
-                                </Grid>
+                                </DockPanel>
                             </Border>
 
                             <Border Grid.Column="1" Grid.Row="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                     BorderThickness="0,0,0,1" Padding="10">
 
-                                <StackPanel Orientation="Horizontal"  VerticalAlignment="Top">
-                                    <TextBlock Text="{Binding Source={x:Static properties:Strings.Total}, StringFormat={}{0}:}"/>
-                                    <TextBox Margin="0,2" x:Name="PriceTxt" Text="{Binding Price, ValidatesOnDataErrors=True}"/>
-                                </StackPanel>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock DockPanel.Dock="Left" Grid.Column="0"
+                                               Text="{Binding Source={x:Static properties:Strings.Total}, StringFormat={}{0}:}"/>
+                                    <TextBox Grid.Column="1" Margin="0,2" HorizontalContentAlignment="Right" VerticalAlignment="Top"
+                                             Text="{Binding Price, ValidatesOnDataErrors=True}"/>
+                                    <ComboBox Grid.Column="2" VerticalAlignment="Top" Margin="10,0,0,0" MinWidth="50"
+                                              ItemsSource="{Binding Currencies}"
+                                              SelectedValuePath="Value"
+                                              DisplayMemberPath="Description"/>
+                                </Grid>
                             </Border>
 
                             <Border Grid.Row="4" Grid.Column="0" BorderThickness="1,0,0,0"/>
-                            <Border Grid.Column="1" Grid.Row="4" Padding="10" HorizontalAlignment="Left" VerticalAlignment="Top" 
+                            <Border Grid.Column="1" Grid.Row="4" Padding="10" VerticalAlignment="Top" 
                     BorderThickness="0,0,0,0">
                                 <!--SIGNATURE SECTION-->
-                                <StackPanel Orientation="Horizontal"  >
-                                    <TextBlock Text="{Binding Source={x:Static properties:Strings.IssuedBy}, StringFormat={}{0}:}" FontWeight="Bold"/>
-                                    <TextBlock FontWeight="Bold" Text="{Binding IssuedBy}"/>
-                                </StackPanel>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
 
+                                    <TextBlock Grid.Column="0"
+                                        Text="{Binding Source={x:Static properties:Strings.IssuedBy}, StringFormat={}{0}:}" FontWeight="Bold"/>
+                                    <TextBox Grid.Column="1" FontWeight="Bold" Text="{Binding IssuedBy}"/>
+                                </Grid>
                             </Border>
                         </Grid>
                     </Border>

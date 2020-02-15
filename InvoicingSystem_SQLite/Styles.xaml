@@ -5,8 +5,7 @@
     <Thickness x:Key="CommonMargin">0,5</Thickness>
 
     <Style TargetType="TextBox">
-        <Setter Property="MaxWidth" Value="200"/>
-        <Setter Property="MinWidth" Value="100"/>
+        <Setter Property="HorizontalAlignment" Value="Stretch"/>
         <Setter Property="Margin" Value="{StaticResource CommonMargin}"/>
     </Style>
 
@@ -16,13 +15,21 @@
 
     <Style TargetType="TextBlock">
         <Setter Property="Margin" Value="{StaticResource CommonMargin}"/>
+        <Setter Property="TextWrapping" Value="Wrap"/>
     </Style>
 
     <Style TargetType="ComboBox">
-        <Setter Property="Background" Value="white"/>
+        <Setter Property="Background" Value="White"/>
+        <Setter Property="HorizontalAlignment" Value="Stretch"/>
     </Style>
 
     <Style TargetType="{x:Type DatePickerTextBox}">
         <Setter Property="Text" Value="{Binding Source={x:Static properties:Strings.SelectDate}, Mode=OneWay}"/>
+    </Style>
+
+    <Style TargetType="DatePicker">
+        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        <Setter Property="MaxHeight" Value="30"/>
+        <Setter Property="Padding" Value="5,5,5,0"/>
     </Style>
 </ResourceDictionary>

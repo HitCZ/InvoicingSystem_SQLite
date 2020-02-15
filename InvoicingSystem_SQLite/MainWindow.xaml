@@ -6,8 +6,10 @@
         xmlns:local="clr-namespace:InvoicingSystem_SQLite"
         xmlns:invoiceControl="clr-namespace:InvoicingSystem_SQLite.Components.InvoiceControl"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="900" Width="1000" MinWidth="500" MinHeight="500">
     <Grid>
-        <invoiceControl:InvoiceControl />
+        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+            <invoiceControl:InvoiceControl />
+        </ScrollViewer>
     </Grid>
 </Window>
