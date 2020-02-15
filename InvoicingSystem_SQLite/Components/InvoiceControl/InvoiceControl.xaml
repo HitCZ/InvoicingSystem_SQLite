@@ -4,6 +4,7 @@
                     xmlns:properties="clr-namespace:InvoicingSystem_SQLite.Properties">
 
     <Style TargetType="local:InvoiceControl">
+        <Setter Property="DataContext" Value="{Binding RelativeSource={RelativeSource Self}}"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate>
@@ -26,7 +27,8 @@
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                                     <TextBlock Text="{Binding Source={x:Static properties:Strings.InvoiceNumber}, StringFormat={}{0}:}" 
                                                Margin="0" />
-                                    <TextBox Text="{Binding InvoiceNumber}" Width="100"  Margin="5,0" 
+                                    <TextBox Text="{Binding InvoiceNumber, UpdateSourceTrigger=PropertyChanged}" 
+                                             Width="100"  Margin="5,0" 
                                              />
                                 </StackPanel>
                             </Border>
@@ -55,52 +57,52 @@
                                     <TextBlock Grid.Row="0" Grid.Column="0"
                                                Text="{x:Static properties:Strings.Contractor}" FontWeight="Bold"/>
 
-                                    <!-- Your name-->
+                                    <!-- CONTRACTOR NAME-->
                                     <TextBlock Grid.Row="1" Grid.Column="0" 
                                                Text="{Binding Source={x:Static properties:Strings.YourName}, StringFormat={}{0}:}"/>
                                     <TextBox Grid.Row="1" Grid.Column="1" 
-                                             Text="{Binding ContractorName, ValidatesOnDataErrors=True}" />
+                                             Text="{Binding ContractorName, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" />
 
                                     <!--CONTRACTOR STREET-->
                                     <TextBlock Grid.Row="2" Grid.Column="0"
                                                Text="{Binding Source={x:Static properties:Strings.Street}, StringFormat={}{0}:}"/>
                                     <TextBox Grid.Row="2" Grid.Column="1" 
-                                             Text="{Binding ContractorStreet, ValidatesOnDataErrors=True}"/>
+                                             Text="{Binding ContractorStreet, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
 
                                     <!--CONTRACTOR BUILDING NUMBER-->
                                     <TextBlock Grid.Row="3" Grid.Column="0"
                                                Text="{Binding Source={x:Static properties:Strings.BuildingNumber}, StringFormat={}{0}:}"/>
                                     <TextBox Grid.Row="3" Grid.Column="1"
-                                             Text="{Binding ContractorBuildingNumber, ValidatesOnDataErrors=True}"/>
+                                             Text="{Binding ContractorBuildingNumber, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
 
                                     <!--CONTRACTOR ZIPCODE-->
                                     <TextBlock Grid.Row="4" Grid.Column="0"
                                                Text="{Binding Source={x:Static properties:Strings.ZipCode}, StringFormat={}{0}:}"/>
                                     <TextBox Grid.Row="4" Grid.Column="1"
-                                             Text="{Binding ContractorZip, ValidatesOnDataErrors=True}"/>
+                                             Text="{Binding ContractorZipCode, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
 
                                     <!--CONTRACTOR CITY-->
                                     <TextBlock Grid.Row="5" Grid.Column="0"
                                                Text="{Binding Source={x:Static properties:Strings.City}, StringFormat={}{0}:}"/>
                                     <TextBox Grid.Row="5" Grid.Column="1" 
-                                             Text="{Binding ContractorCity, ValidatesOnDataErrors=True}"/>
+                                             Text="{Binding ContractorCity, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
 
                                     <!--CONTRACTOR IDENTIFICATION NUMBER-->
                                     <TextBlock Grid.Row="6" Grid.Column="0" 
                                                Text="{Binding Source={x:Static properties:Strings.IdentificationNumber}, StringFormat={}{0}:}"/>
                                     <TextBox Grid.Row="6" Grid.Column="1" 
-                                             Text="{Binding ContractorIn, ValidatesOnDataErrors=True}"/>
+                                             Text="{Binding ContractorIn, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
 
                                     <!--CONTRACTOR VAT PAYER-->
                                     <TextBlock Grid.Row="7" Grid.Column="0"
                                                Text="{Binding Source={x:Static properties:Strings.VatPayer}, StringFormat={}{0}:}"/>
-                                    <CheckBox Grid.Row="7" Grid.Column="1" IsChecked="True" Margin="0,5,0,0"/>
+                                    <CheckBox Grid.Row="7" Grid.Column="1" IsChecked="{Binding IsVATPayer, UpdateSourceTrigger=PropertyChanged}" Margin="0,5,0,0"/>
 
                                     <!--CONTRACTOR CITY OF EVIDENCE-->
                                     <TextBlock Grid.Row="8" Grid.Column="0"
                                                Text="{Binding Source={x:Static properties:Strings.CityOfEvidence}, StringFormat={}{0}:}"/>
                                     <TextBox Grid.Row="8" Grid.Column="1" 
-                                             Text="{Binding CityOfEvidence, ValidatesOnDataErrors=True}"
+                                             Text="{Binding CityOfEvidence, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
                                              Margin="0,5,0,20"/>
                                 </Grid>
                             </Border>
@@ -132,43 +134,43 @@
                                     <TextBlock Grid.Row="1" Grid.Column="0"
                                                Text="{Binding Source={x:Static properties:Strings.CompanyName}, StringFormat={}{0}:}"/>
                                     <TextBox Grid.Row="1" Grid.Column="1" 
-                                             Text="{Binding CustomerName, ValidatesOnDataErrors=True}"/>
+                                             Text="{Binding CustomerName, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
 
                                     <!--CUSTOMER STREET-->
                                     <TextBlock Grid.Row="2" Grid.Column="0"
                                                Text="{Binding Source={x:Static properties:Strings.Street}, StringFormat={}{0}:}"/>
                                     <TextBox Grid.Row="2" Grid.Column="1"
-                                             Text="{Binding CustomerStreet, ValidatesOnDataErrors=True}"/>
+                                             Text="{Binding CustomerStreet, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
 
                                     <!--CUSTOMER BUILDING NUMBER-->
                                     <TextBlock Grid.Row="3" Grid.Column="0" 
                                                Text="{Binding Source={x:Static properties:Strings.BuildingNumber}, StringFormat={}{0}:}"/>
                                     <TextBox Grid.Row="3" Grid.Column="1" 
-                                             Text="{Binding CustomerBuildingNumber, ValidatesOnDataErrors=True}"/>
+                                             Text="{Binding CustomerBuildingNumber, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
 
                                     <!--CUSTOMER ZIPCODE-->
                                     <TextBlock Grid.Row="4" Grid.Column="0"
                                                Text="{Binding Source={x:Static properties:Strings.ZipCode}, StringFormat={}{0}:}"/>
                                     <TextBox Grid.Row="4" Grid.Column="1"
-                                             Text="{Binding CustomerZip, ValidatesOnDataErrors=True}"/>
+                                             Text="{Binding CustomerZipCode, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
 
                                     <!--CUSTOMER CITY-->
                                     <TextBlock Grid.Row="5" Grid.Column="0" 
                                                Text="{Binding Source={x:Static properties:Strings.City}, StringFormat={}{0}:}"/>
                                     <TextBox Grid.Row="5" Grid.Column="1" 
-                                             Text="{Binding CustomerCity, ValidatesOnDataErrors=True}"/>
+                                             Text="{Binding CustomerCity, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
 
                                     <!--CUSTOMER IN-->
                                     <TextBlock Grid.Row="6" Grid.Column="0" 
                                                Text="{Binding Source={x:Static properties:Strings.IdentificationNumber}, StringFormat={}{0}:}"/>
                                     <TextBox Grid.Row="6" Grid.Column="1"
-                                             Text="{Binding CustomerIn, ValidatesOnDataErrors=True}"/>
+                                             Text="{Binding CustomerIN, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
 
                                     <!--CUSTOMER VATIN-->
                                     <TextBlock Grid.Row="7" Grid.Column="0" 
                                                Text="{Binding Source={x:Static properties:Strings.VatIdentificationNumber}, StringFormat={}{0}:}"/>
                                     <TextBox Grid.Row="7" Grid.Column="1"
-                                             Text="{Binding CustomerVatin, ValidatesOnDataErrors=True}"/>
+                                             Text="{Binding CustomerVATIN, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
                                 </Grid>
                             </Border>
                             <!--#endregion Customer-->
@@ -198,8 +200,8 @@
                                     <TextBlock Grid.Row="1" Grid.Column="0" 
                                                Text="{Binding Source={x:Static properties:Strings.PaymentMethod}, StringFormat={}{0}:}"/>
                                     <ComboBox Grid.Row="1" Grid.Column="1" 
-                                              ItemsSource="{Binding PaymentMethods}"
-                                              SelectedValue="{Binding SelectedPaymentMethod}"
+                                              ItemsSource="{Binding PaymentMethods, UpdateSourceTrigger=PropertyChanged}"
+                                              SelectedValue="{Binding SelectedPaymentMethod, UpdateSourceTrigger=PropertyChanged}"
                                               SelectedValuePath="Value"
                                               DisplayMemberPath="Description"/>
 
@@ -207,19 +209,19 @@
                                     <TextBlock Grid.Row="2" Grid.Column="0" 
                                                Text="{Binding Source={x:Static properties:Strings.BankConnection}, StringFormat={}{0}:}"/>
                                     <TextBox Grid.Row="2" Grid.Column="1"
-                                             Text="{Binding BankConnection, ValidatesOnDataErrors=True}"/>
+                                             Text="{Binding BankConnection, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
 
                                     <!--BANK ACCOUNT NUMBER-->
                                     <TextBlock Grid.Row="3" Grid.Column="0" 
                                                Text="{Binding Source={x:Static properties:Strings.AccountNumber}, StringFormat={}{0}:}"/>
                                     <TextBox Grid.Row="3" Grid.Column="1"
-                                             Text="{Binding BankAccount, ValidatesOnDataErrors=True}"/>
+                                             Text="{Binding BankAccount, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
 
                                     <!--VARIABLE SYMBOL-->
                                     <TextBlock Grid.Row="4" Grid.Column="0" 
                                                Text="{Binding Source={x:Static properties:Strings.VariableSymbol}, StringFormat={}{0}:}"/>
                                     <TextBox Grid.Row="4" Grid.Column="1"
-                                             Text="{Binding VariableSymbol, ValidatesOnDataErrors=True}"/>
+                                             Text="{Binding VariableSymbol, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
                                 </Grid>
                             </Border>
 
@@ -239,12 +241,13 @@
                                     <TextBlock Grid.Row="0" Grid.Column="0" Margin="0,30"
                                                Text="{Binding Source={x:Static properties:Strings.DateOfIssue}, StringFormat={}{0}:}"/>
                                     <DatePicker Grid.Row="0" Grid.Column="1"
-                                                SelectedDate="{Binding SelectedDateOfIssue}" 
+                                                SelectedDate="{Binding SelectedDateOfIssue, UpdateSourceTrigger=PropertyChanged}" 
                                                 Margin="0,10" />
 
                                     <TextBlock Grid.Row="1" Grid.Column="0" Margin="0,15"
                                                Text="{Binding Source={x:Static properties:Strings.DueDate}, StringFormat={}{0}:}"/>
-                                    <DatePicker Grid.Row="1" Grid.Column="1"/>
+                                    <DatePicker Grid.Row="1" Grid.Column="1" 
+                                                SelectedDate="{Binding SelectedDueDate, UpdateSourceTrigger=PropertyChanged}"/>
                                 </Grid>
                             </Border>
 
@@ -263,7 +266,7 @@
                                              VerticalAlignment="Stretch"
                                              HorizontalAlignment="Stretch"
                                              MinHeight="150" 
-                                             Text="{Binding JobDescription, ValidatesOnDataErrors=True}"/>
+                                             Text="{Binding JobDescription, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
                                 </DockPanel>
                             </Border>
 
@@ -281,9 +284,10 @@
                                     <TextBox Grid.Column="1" Margin="0,2" HorizontalContentAlignment="Right" VerticalAlignment="Top"
                                              Text="{Binding Price, ValidatesOnDataErrors=True}"/>
                                     <ComboBox Grid.Column="2" VerticalAlignment="Top" Margin="10,0,0,0" MinWidth="50"
-                                              ItemsSource="{Binding Currencies}"
+                                              ItemsSource="{Binding Currencies, UpdateSourceTrigger=PropertyChanged}"
                                               SelectedValuePath="Value"
-                                              DisplayMemberPath="Description"/>
+                                              DisplayMemberPath="Description"
+                                              SelectedValue="{Binding SelectedCurrency, UpdateSourceTrigger=PropertyChanged}"/>
                                 </Grid>
                             </Border>
 
@@ -299,7 +303,7 @@
 
                                     <TextBlock Grid.Column="0"
                                         Text="{Binding Source={x:Static properties:Strings.IssuedBy}, StringFormat={}{0}:}" FontWeight="Bold"/>
-                                    <TextBox Grid.Column="1" FontWeight="Bold" Text="{Binding IssuedBy}"/>
+                                    <TextBox Grid.Column="1" FontWeight="Bold" Text="{Binding IssuedBy, UpdateSourceTrigger=PropertyChanged}"/>
                                 </Grid>
                             </Border>
                         </Grid>

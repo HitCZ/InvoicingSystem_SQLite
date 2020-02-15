@@ -1,0 +1,40 @@
+﻿<Window x:Class="InvoicingSystem_SQLite.Views.MainView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:invoiceControl="clr-namespace:InvoicingSystem_SQLite.Components.InvoiceControl"
+        xmlns:views="clr-namespace:InvoicingSystem_SQLite.Views"
+        mc:Ignorable="d"
+        Title="MainView" Height="900" Width="1000" MinWidth="500" MinHeight="500">
+    <Grid>
+        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+            <invoiceControl:InvoiceControl
+                DataContext="{Binding ViewModel, RelativeSource={RelativeSource AncestorType=views:MainView}}"
+                InvoiceNumber="{Binding InvoiceNumber}"
+                ContractorName="{Binding ContractorName}"
+                ContractorStreet="{Binding ContractorStreet}"
+                ContractorBuildingNumber="{Binding ContractorBuildingNumber}"
+                ContractorZipCode="{Binding ContractorZipCode}"
+                ContractorIN="{Binding ContractorIN}"
+                IsVATPayer="{Binding IsVATPayer}"
+                CityOfEvidence="{Binding CityOfEvidence}"
+                CustomerName="{Binding CustomerName}"
+                CustomerStreet="{Binding CustomerStreet}"
+                CustomerBuildingNumber="{Binding CustomerBuildingNumber}"
+                CustomerZipCode="{Binding CustomerZipCode}"
+                CustomerCity="{Binding CustomerCity}"
+                CustomerIN="{Binding CustomerIN}"
+                CustomerVATIN="{Binding CustomerVATIN}"
+                PaymentMethods="{Binding PaymentMethods}"
+                BankConnection="{Binding BankConnection}"
+                BankAccount="{Binding BankAccount}"
+                VariableSymbol="{Binding VariableSymbol}"
+                DateOfIssue="{Binding DateOfIssue}"
+                DueDate="{Binding DueDate}"
+                JobDescription="{Binding JobDescription}"
+                Currencies="{Binding Currencies}"
+                IssuedBy="{Binding IssuedBy}"/>
+        </ScrollViewer>
+    </Grid>
+</Window>
