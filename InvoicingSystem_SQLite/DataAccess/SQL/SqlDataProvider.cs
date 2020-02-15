@@ -151,7 +151,7 @@ namespace InvoicingSystem_SQLite.DataAccess.SQL
         }
 
         /// <summary>
-        /// Returns strings in format "PropertyName = value" (e.g. FirstName = "John"), without ID.
+        /// Returns strings in format "PropertyName = value" (e.g. FirstName = "John"), without ID and <see cref="IDatabaseStorableObject"/> types.
         /// </summary>
         protected virtual IEnumerable<string> GetJoinedChangesForUpdate(T item)
         {
@@ -231,7 +231,7 @@ namespace InvoicingSystem_SQLite.DataAccess.SQL
         }
 
         /// <summary>
-        /// Returns collection of property indexes, names and values, of all properties, except <see cref="IDatabaseStorableObject"/>.
+        /// Returns collection of property names and values, of all properties, except <see cref="IDatabaseStorableObject"/>.
         /// When property value is null, it is not included within the list.
         /// </summary>
         protected List<PropertyInformation> GetPropertiesInformation(T item)

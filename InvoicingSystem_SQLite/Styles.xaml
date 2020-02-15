@@ -1,0 +1,28 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:properties="clr-namespace:InvoicingSystem_SQLite.Properties">
+
+    <Thickness x:Key="CommonMargin">0,5</Thickness>
+
+    <Style TargetType="TextBox">
+        <Setter Property="MaxWidth" Value="200"/>
+        <Setter Property="MinWidth" Value="100"/>
+        <Setter Property="Margin" Value="{StaticResource CommonMargin}"/>
+    </Style>
+
+    <Style TargetType="Border">
+        <Setter Property="BorderBrush" Value="Black"/>
+    </Style>
+
+    <Style TargetType="TextBlock">
+        <Setter Property="Margin" Value="{StaticResource CommonMargin}"/>
+    </Style>
+
+    <Style TargetType="ComboBox">
+        <Setter Property="Background" Value="white"/>
+    </Style>
+
+    <Style TargetType="{x:Type DatePickerTextBox}">
+        <Setter Property="Text" Value="{Binding Source={x:Static properties:Strings.SelectDate}, Mode=OneWay}"/>
+    </Style>
+</ResourceDictionary>

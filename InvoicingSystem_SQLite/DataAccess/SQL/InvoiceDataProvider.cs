@@ -29,8 +29,7 @@ namespace InvoicingSystem_SQLite.DataAccess.SQL
             EnsureDependenciesAreSet(item);
 
             var query = !item.Id.HasValue ? GetInsertQuery(item) : GetUpdateQuery(item);
-            var result = queryExecutor.ExecuteQueryWithFeedback(query);
-            var success = result == 0;
+            var success = queryExecutor.ExecuteQueryWithFeedback(query);
 
             return (query, success);
         }
