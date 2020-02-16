@@ -1,16 +1,14 @@
-﻿using System;
-
-namespace InvoicingSystem_SQLite.Logic
+﻿namespace InvoicingSystem_SQLite.Logic
 {
-    public struct ValueDescription<T> where T : Enum
+    public struct ValueDescription
     {
         public string Description { get; }
-        public T Value { get; }
+        public object Value { get; }
 
-        public ValueDescription(string description, T value)
+        public ValueDescription(object value, string description)
         {
-            Description = description;
             Value = value;
+            Description = description;
         }
     }
 }

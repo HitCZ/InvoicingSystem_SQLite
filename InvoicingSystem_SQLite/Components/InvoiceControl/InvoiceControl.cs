@@ -1,26 +1,14 @@
 ﻿using Invoicing.Enumerations;
 using InvoicingSystem_SQLite.Logic;
-using InvoicingSystem_SQLite.Logic.Extensions;
 using System;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
 
 namespace InvoicingSystem_SQLite.Components.InvoiceControl
 {
-    [TemplatePart(Name = "PART_InvoiceNumber", Type = typeof(TextBox))]
-    [TemplatePart(Name = "PART_Total", Type = typeof(TextBox))]
     public class InvoiceControl : Control
     {
-        #region Fields
-
-        private TextBox invoiceNumberTxt;
-        private TextBox totalTxt;
-
-        #endregion Fields
-
         #region Dependency Properties
 
         public ulong InvoiceNumber
@@ -201,14 +189,25 @@ namespace InvoicingSystem_SQLite.Components.InvoiceControl
 
         #region Payment Conditions
 
-        public ObservableCollection<ValueDescription<PaymentMethod>> PaymentMethods
+        public ObservableCollection<ValueDescription> PaymentMethods
         {
-            get => (ObservableCollection<ValueDescription<PaymentMethod>>)GetValue(PaymentMethodsProperty);
+            get => (ObservableCollection<ValueDescription>)GetValue(PaymentMethodsProperty);
             set => SetValue(PaymentMethodsProperty, value);
         }
 
         public static readonly DependencyProperty PaymentMethodsProperty =
-            DependencyProperty.Register("PaymentMethods", typeof(ObservableCollection<ValueDescription<PaymentMethod>>), typeof(InvoiceControl));
+            DependencyProperty.Register("PaymentMethods", typeof(ObservableCollection<ValueDescription>), typeof(InvoiceControl));
+
+
+        public PaymentMethod SelectedPaymentMethod
+        {
+            get => (PaymentMethod)GetValue(SelectedPaymentMethodProperty);
+            set => SetValue(SelectedPaymentMethodProperty, value);
+        }
+
+        public static readonly DependencyProperty SelectedPaymentMethodProperty =
+            DependencyProperty.Register("SelectedPaymentMethod", typeof(PaymentMethod), typeof(InvoiceControl));
+
 
         public string BankConnection
         {
@@ -266,14 +265,14 @@ namespace InvoicingSystem_SQLite.Components.InvoiceControl
         public static readonly DependencyProperty JobDescriptionProperty =
             DependencyProperty.Register("JobDescription", typeof(string), typeof(InvoiceControl));
 
-        public ObservableCollection<ValueDescription<Currency>> Currencies
+        public ObservableCollection<ValueDescription> Currencies
         {
-            get => (ObservableCollection<ValueDescription<Currency>>)GetValue(CurrenciesProperty);
+            get => (ObservableCollection<ValueDescription>)GetValue(CurrenciesProperty);
             set => SetValue(CurrenciesProperty, value);
         }
 
         public static readonly DependencyProperty CurrenciesProperty =
-            DependencyProperty.Register("Currencies", typeof(ObservableCollection<ValueDescription<Currency>>), typeof(InvoiceControl));
+            DependencyProperty.Register("Currencies", typeof(ObservableCollection<ValueDescription>), typeof(InvoiceControl));
 
         public string IssuedBy
         {
@@ -293,64 +292,16 @@ namespace InvoicingSystem_SQLite.Components.InvoiceControl
         public static readonly DependencyProperty TotalProperty =
             DependencyProperty.Register("Total", typeof(string), typeof(InvoiceControl));
 
-
-
         #endregion Dependency Properties
+
+        #region Constructor
 
         public InvoiceControl()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(InvoiceControl),
                 new FrameworkPropertyMetadata(typeof(InvoiceControl)));
-
-            Loaded += (o, e) => InitializeEventHandlers();
         }
 
-        private void InitializeEventHandlers()
-        {
-            invoiceNumberTxt.PreviewTextInput += InvoiceNumberTxtOnPreviewTextInput;
-            totalTxt.PreviewTextInput += TotalTxt_PreviewTextInput;
-            totalTxt.TextChanged += TotalTxt_TextChanged;
-        }
-
-        private void TotalTxt_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            if (!e.Changes.Any(c => c.RemovedLength > 0)) 
-                return;
-            totalTxt.Text = totalTxt.Text.FormatIntoNumbers();
-            totalTxt.CaretIndex = totalTxt.Text.Length;
-        }
-
-        private void TotalTxt_PreviewTextInput(object sender, TextCompositionEventArgs e)
-        {
-            var separator = " ";
-
-            if (e.Text != separator || !e.Text.IsNumber())
-                e.Handled = true;
-
-            if (e.Text == separator)
-                return;
-
-            var currentText = totalTxt.Text;
-            var newText = currentText + e.Text;
-            var formattedText = newText.FormatIntoNumbers();
-
-            totalTxt.Text = formattedText;
-            totalTxt.CaretIndex = totalTxt.Text.Length;
-            e.Handled = true;
-        }
-
-        private void InvoiceNumberTxtOnPreviewTextInput(object sender, TextCompositionEventArgs e)
-        {
-            if (!e.Text.IsNumber())
-                e.Handled = true;
-        }
-
-        public override void OnApplyTemplate()
-        {
-            base.OnApplyTemplate();
-
-            invoiceNumberTxt = GetTemplateChild("PART_InvoiceNumber") as TextBox;
-            totalTxt = GetTemplateChild("PART_Total") as TextBox;
-        }
+        #endregion Constructor
     }
 }

@@ -35,7 +35,8 @@
                 JobDescription="{Binding JobDescription}"
                 Currencies="{Binding Currencies}"
                 IssuedBy="{Binding IssuedBy}"
-                Total="{Binding Total}"/>
+                Total="{Binding Total}"
+                SelectedPaymentMethod="{Binding SelectedPaymentMethod}"/>
         </ScrollViewer>
     </Grid>
 </Window>

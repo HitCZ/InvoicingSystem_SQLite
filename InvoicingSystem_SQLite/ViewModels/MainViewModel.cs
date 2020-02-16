@@ -2,6 +2,8 @@
 using InvoicingSystem_SQLite.Logic;
 using System;
 using System.Collections.ObjectModel;
+using System.Linq;
+using InvoicingSystem_SQLite.Logic.Extensions;
 
 namespace InvoicingSystem_SQLite.ViewModels
 {
@@ -144,9 +146,9 @@ namespace InvoicingSystem_SQLite.ViewModels
             set => SetPropertyValue(value);
         }
 
-        public ObservableCollection<ValueDescription<Currency>> Currencies
+        public ObservableCollection<ValueDescription> Currencies
         {
-            get => GetPropertyValue<ObservableCollection<ValueDescription<Currency>>>();
+            get => GetPropertyValue<ObservableCollection<ValueDescription>>();
             set => SetPropertyValue(value);
         }
 
@@ -156,9 +158,9 @@ namespace InvoicingSystem_SQLite.ViewModels
             set => SetPropertyValue(value);
         }
 
-        public ObservableCollection<ValueDescription<PaymentMethod>> PaymentMethods
+        public ObservableCollection<ValueDescription> PaymentMethods
         {
-            get => GetPropertyValue<ObservableCollection<ValueDescription<PaymentMethod>>>();
+            get => GetPropertyValue<ObservableCollection<ValueDescription>>();
             set => SetPropertyValue(value);
         }
 
@@ -192,9 +194,27 @@ namespace InvoicingSystem_SQLite.ViewModels
             set => SetPropertyValue(value);
         }
 
+        public PaymentMethod SelectedPaymentMethod
+        {
+            get => GetPropertyValue<PaymentMethod>();
+            set => SetPropertyValue(value);
+        }
+
         #endregion Other
 
         #endregion Properties
 
+        public MainViewModel()
+        {
+            Initialize();
+        }
+
+        private void Initialize()
+        {
+            Currencies = new ObservableCollection<ValueDescription>(EnumExtensions<Currency>.GetAllValueDescriptions());
+            SelectedCurrency = Currency.CZK;
+            PaymentMethods = new ObservableCollection<ValueDescription>(EnumExtensions<PaymentMethod>.GetAllValueDescriptions(true));
+            SelectedPaymentMethod = PaymentMethod.BankTransfer;
+        }
     }
 }

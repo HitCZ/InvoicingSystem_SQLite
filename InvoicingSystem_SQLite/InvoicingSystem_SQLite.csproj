@@ -102,6 +102,8 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Components\InvoiceControl\InvoiceControl.cs" />
+    <Compile Include="Components\NumericTextBox.cs" />
+    <Compile Include="Components\TextBoxWithNumericFormatting\TextBoxWithNumericFormatting.cs" />
     <Compile Include="DataAccess\QueryExecution\QueryExecutor.cs" />
     <Compile Include="DataAccess\QueryExecution\IQueryExecutor.cs" />
     <Compile Include="DataAccess\SQL\ITypeToTableMappingManager.cs" />
@@ -113,8 +115,10 @@
     <Compile Include="Logic\Comparers\EnumerablePropertyInformationOrderIndependentComparer.cs" />
     <Compile Include="Logic\Comparers\EnumerableStringComparer.cs" />
     <Compile Include="Logic\Comparers\PropertyInformationComparer.cs" />
+    <Compile Include="Logic\Enumerations\PaymentMethodCs.cs" />
     <Compile Include="Logic\Exceptions\InvalidPropertyInformationException.cs" />
     <Compile Include="Logic\Exceptions\TableNotFoundException.cs" />
+    <Compile Include="Logic\Extensions\EnumExtensions.cs" />
     <Compile Include="Logic\Extensions\IEnumerableExtensions.cs" />
     <Compile Include="Logic\Extensions\PropertyInfoExtensions.cs" />
     <Compile Include="Logic\NotificationObject.cs" />
@@ -145,7 +149,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Logic\Constants\Strings.cs" />
-    <Compile Include="Logic\Enumerations\PaymentMethod.cs" />
     <Compile Include="Logic\ExcelCreation\ExcelCreator.cs" />
     <Compile Include="Logic\Extensions\StringExtensions.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
