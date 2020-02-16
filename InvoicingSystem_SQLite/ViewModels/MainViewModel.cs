@@ -164,25 +164,31 @@ namespace InvoicingSystem_SQLite.ViewModels
 
         public string BankConnection
         {
-            get => GetPropertyValue<string>(); 
+            get => GetPropertyValue<string>();
             set => SetPropertyValue(value);
         }
 
         public string BankAccount
         {
-            get => GetPropertyValue<string>(); 
+            get => GetPropertyValue<string>();
             set => SetPropertyValue(value);
         }
 
         public string VariableSymbol
         {
-            get => GetPropertyValue<string>(); 
+            get => GetPropertyValue<string>();
             set => SetPropertyValue(value);
         }
 
         public Currency SelectedCurrency
         {
-            get => GetPropertyValue<Currency>(); 
+            get => GetPropertyValue<Currency>();
+            set => SetPropertyValue(value);
+        }
+
+        public string Total
+        {
+            get => GetPropertyValue<string>();
             set => SetPropertyValue(value);
         }
 

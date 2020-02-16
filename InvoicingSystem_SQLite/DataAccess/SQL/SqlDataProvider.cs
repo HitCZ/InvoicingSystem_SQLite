@@ -1,6 +1,5 @@
 ﻿using Invoicing.Attributes;
 using Invoicing.Models;
-using InvoicingSystem.Logic.Extensions;
 using InvoicingSystem_SQLite.DataAccess.QueryExecution;
 using InvoicingSystem_SQLite.Logic.Exceptions;
 using InvoicingSystem_SQLite.Logic.Extensions;

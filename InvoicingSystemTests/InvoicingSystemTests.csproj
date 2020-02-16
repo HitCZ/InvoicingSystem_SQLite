@@ -74,6 +74,7 @@
     <Compile Include="DataAccess\SQL\SqlDataProviderTests.cs" />
     <Compile Include="Extensions\IEnumerableExtensionsTests.cs" />
     <Compile Include="Extensions\PropertyInfoExtensionsTests.cs" />
+    <Compile Include="Extensions\StringExtensionsTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestClass.cs" />
     <Compile Include="Validators\DbValidatorTests.cs" />

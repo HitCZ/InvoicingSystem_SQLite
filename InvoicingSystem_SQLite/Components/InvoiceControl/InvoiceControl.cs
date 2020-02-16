@@ -1,14 +1,25 @@
-﻿using System;
+﻿using Invoicing.Enumerations;
+using InvoicingSystem_SQLite.Logic;
+using InvoicingSystem_SQLite.Logic.Extensions;
+using System;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
-using Invoicing.Enumerations;
-using InvoicingSystem_SQLite.Logic;
+using System.Windows.Input;
 
 namespace InvoicingSystem_SQLite.Components.InvoiceControl
 {
+    [TemplatePart(Name = "PART_InvoiceNumber", Type = typeof(TextBox))]
+    [TemplatePart(Name = "PART_Total", Type = typeof(TextBox))]
     public class InvoiceControl : Control
     {
+        #region Fields
+
+        private TextBox invoiceNumberTxt;
+        private TextBox totalTxt;
+
+        #endregion Fields
+
         #region Dependency Properties
 
         public ulong InvoiceNumber
@@ -29,12 +40,8 @@ namespace InvoicingSystem_SQLite.Components.InvoiceControl
         }
 
         public static readonly DependencyProperty ContractorNameProperty =
-            DependencyProperty.Register("ContractorName", typeof(string), typeof(InvoiceControl), new FrameworkPropertyMetadata(OnNameChanged));
+            DependencyProperty.Register("ContractorName", typeof(string), typeof(InvoiceControl));
 
-        private static void OnNameChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            
-        }
 
         public string ContractorStreet
         {
@@ -276,12 +283,64 @@ namespace InvoicingSystem_SQLite.Components.InvoiceControl
         public static readonly DependencyProperty IssuedByProperty =
             DependencyProperty.Register("IssuedBy", typeof(string), typeof(InvoiceControl));
 
+        public string Total
+        {
+            get => (string)GetValue(TotalProperty);
+            set => SetValue(TotalProperty, value);
+        }
+
+        public static readonly DependencyProperty TotalProperty =
+            DependencyProperty.Register("Total", typeof(string), typeof(InvoiceControl));
+
+
+
         #endregion Dependency Properties
 
         public InvoiceControl()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(InvoiceControl),
                 new FrameworkPropertyMetadata(typeof(InvoiceControl)));
+
+            Loaded += (o, e) => InitializeEventHandlers();
+        }
+
+        private void InitializeEventHandlers()
+        {
+            invoiceNumberTxt.PreviewTextInput += InvoiceNumberTxtOnPreviewTextInput;
+            totalTxt.PreviewTextInput += TotalTxt_PreviewTextInput;
+        }
+
+        private void TotalTxt_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            var separator = " ";
+
+            if (e.Text != separator || !e.Text.IsNumber())
+                e.Handled = true;
+
+            if (e.Text == separator)
+                return;
+
+            var currentText = totalTxt.Text;
+            var newText = currentText + e.Text;
+            var formattedText = newText.FormatIntoNumbers();
+
+            totalTxt.Text = formattedText;
+            totalTxt.CaretIndex = totalTxt.Text.Length;
+            e.Handled = true;
+        }
+
+        private void InvoiceNumberTxtOnPreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            if (!e.Text.IsNumber())
+                e.Handled = true;
+        }
+
+        public override void OnApplyTemplate()
+        {
+            base.OnApplyTemplate();
+
+            invoiceNumberTxt = GetTemplateChild("PART_InvoiceNumber") as TextBox;
+            totalTxt = GetTemplateChild("PART_Total") as TextBox;
         }
     }
 }

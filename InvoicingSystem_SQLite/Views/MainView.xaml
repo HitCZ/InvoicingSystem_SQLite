@@ -30,11 +30,12 @@
                 BankConnection="{Binding BankConnection}"
                 BankAccount="{Binding BankAccount}"
                 VariableSymbol="{Binding VariableSymbol}"
-                DateOfIssue="{Binding DateOfIssue}"
-                DueDate="{Binding DueDate}"
+                DateOfIssue="{Binding SelectedDateOfIssue}"
+                DueDate="{Binding SelectedDueDate}"
                 JobDescription="{Binding JobDescription}"
                 Currencies="{Binding Currencies}"
-                IssuedBy="{Binding IssuedBy}"/>
+                IssuedBy="{Binding IssuedBy}"
+                Total="{Binding Total}"/>
         </ScrollViewer>
     </Grid>
 </Window>

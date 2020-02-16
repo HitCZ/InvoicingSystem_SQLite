@@ -147,7 +147,7 @@
     <Compile Include="Logic\Constants\Strings.cs" />
     <Compile Include="Logic\Enumerations\PaymentMethod.cs" />
     <Compile Include="Logic\ExcelCreation\ExcelCreator.cs" />
-    <Compile Include="Logic\Extensions\StringExtension.cs" />
+    <Compile Include="Logic\Extensions\StringExtensions.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="Views\MainView.xaml.cs">

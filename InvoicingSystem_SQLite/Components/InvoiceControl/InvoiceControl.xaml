@@ -28,7 +28,7 @@
                                     <TextBlock Text="{Binding Source={x:Static properties:Strings.InvoiceNumber}, StringFormat={}{0}:}" 
                                                Margin="0" />
                                     <TextBox Text="{Binding InvoiceNumber, UpdateSourceTrigger=PropertyChanged}" 
-                                             Width="100"  Margin="5,0" 
+                                             Width="100"  Margin="5,0" Name="PART_InvoiceNumber"
                                              />
                                 </StackPanel>
                             </Border>
@@ -282,7 +282,7 @@
                                     <TextBlock DockPanel.Dock="Left" Grid.Column="0"
                                                Text="{Binding Source={x:Static properties:Strings.Total}, StringFormat={}{0}:}"/>
                                     <TextBox Grid.Column="1" Margin="0,2" HorizontalContentAlignment="Right" VerticalAlignment="Top"
-                                             Text="{Binding Price, ValidatesOnDataErrors=True}"/>
+                                             Text="{Binding Price, ValidatesOnDataErrors=True}" x:Name="PART_Total"/>
                                     <ComboBox Grid.Column="2" VerticalAlignment="Top" Margin="10,0,0,0" MinWidth="50"
                                               ItemsSource="{Binding Currencies, UpdateSourceTrigger=PropertyChanged}"
                                               SelectedValuePath="Value"
