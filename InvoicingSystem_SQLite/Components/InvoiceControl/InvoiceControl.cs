@@ -3,6 +3,7 @@ using InvoicingSystem_SQLite.Logic;
 using InvoicingSystem_SQLite.Logic.Extensions;
 using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -308,6 +309,15 @@ namespace InvoicingSystem_SQLite.Components.InvoiceControl
         {
             invoiceNumberTxt.PreviewTextInput += InvoiceNumberTxtOnPreviewTextInput;
             totalTxt.PreviewTextInput += TotalTxt_PreviewTextInput;
+            totalTxt.TextChanged += TotalTxt_TextChanged;
+        }
+
+        private void TotalTxt_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (!e.Changes.Any(c => c.RemovedLength > 0)) 
+                return;
+            totalTxt.Text = totalTxt.Text.FormatIntoNumbers();
+            totalTxt.CaretIndex = totalTxt.Text.Length;
         }
 
         private void TotalTxt_PreviewTextInput(object sender, TextCompositionEventArgs e)
