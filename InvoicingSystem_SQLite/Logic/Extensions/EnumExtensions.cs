@@ -29,12 +29,19 @@ namespace InvoicingSystem_SQLite.Logic.Extensions
             if (!Equals(Thread.CurrentThread.CurrentUICulture, CultureInfo.GetCultureInfo("cs-CZ")))
                 return description;
 
+            var localizedDescription = GetLocalizedDescription(value);
+
+            return localizedDescription ?? description;
+        }
+
+        private static string GetLocalizedDescription(T value)
+        {
             var enumName = typeof(T).Name;
             var localizedEnumType = Assembly.GetExecutingAssembly().GetTypes()
                 .SingleOrDefault(t => t.IsEnum && t.IsPublic && t.Name.Equals($"{enumName}cs", StringComparison.OrdinalIgnoreCase));
 
             if (localizedEnumType is null)
-                return description;
+                return null;
 
             var localizedDescription = GetDescriptionFromAttribute(localizedEnumType, value);
 
