@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
 using System.Threading;
-using Invoicing.Enumerations;
-using InvoicingSystem_SQLite.Logic.Enumerations;
 
 namespace InvoicingSystem_SQLite.Logic.Extensions
 {
@@ -18,37 +17,40 @@ namespace InvoicingSystem_SQLite.Logic.Extensions
             var result = values.Select(v => new ValueDescription(v, GetEnumDescription(v, localizeDescription))).ToList();
 
             return result;
-        }
+        } 
 
         public static string GetEnumDescription(T value, bool localizeDescription = false)
         {
-            var fieldInfo = value.GetType().GetField(value.ToString());
+            var description = GetDescriptionFromAttribute(typeof(T), value);
+
+            if (!localizeDescription)
+                return description;
+
+            if (!Equals(Thread.CurrentThread.CurrentUICulture, CultureInfo.GetCultureInfo("cs-CZ")))
+                return description;
+
+            var enumName = typeof(T).Name;
+            var localizedEnumType = Assembly.GetExecutingAssembly().GetTypes()
+                .SingleOrDefault(t => t.IsEnum && t.IsPublic && t.Name.Equals($"{enumName}cs", StringComparison.OrdinalIgnoreCase));
+
+            if (localizedEnumType is null)
+                return description;
+
+            var localizedDescription = GetDescriptionFromAttribute(localizedEnumType, value);
+
+            return localizedDescription;
+        }
+
+        private static string GetDescriptionFromAttribute(Type type, T value)
+        {
+            var fieldInfo = type.GetField(value.ToString());
             var attributes = fieldInfo.GetCustomAttributes(typeof(DescriptionAttribute), false)
                 .Cast<DescriptionAttribute>()
                 .ToList();
 
             var anyAttributes = attributes.Any();
 
-            if (!anyAttributes)
-                return value.ToString();
-
-            if (!localizeDescription)
-                return attributes.First().Description;
-
-            // TODO: prasárna
-            if (typeof(T) == typeof(PaymentMethod) &&
-                Equals(Thread.CurrentThread.CurrentUICulture, CultureInfo.GetCultureInfo("cs-CZ")))
-            {
-                var allValueDescriptions = EnumExtensions<PaymentMethodCs>
-                    .GetAllValueDescriptions();
-                var description = allValueDescriptions.FirstOrDefault(v => v.Value.ToString() == value.ToString())
-                    .Description;
-
-                if (!(description is null))
-                    return description;
-            }
-
-            return attributes.First().Description;
+            return !anyAttributes ? value.ToString() : attributes.First().Description;
         }
     }
 }

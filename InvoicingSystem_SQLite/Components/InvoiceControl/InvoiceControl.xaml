@@ -204,7 +204,8 @@
                                               ItemsSource="{Binding PaymentMethods, UpdateSourceTrigger=PropertyChanged}"
                                               SelectedValue="{Binding SelectedPaymentMethod, UpdateSourceTrigger=PropertyChanged}"
                                               SelectedValuePath="Value"
-                                              DisplayMemberPath="Description"/>
+                                              DisplayMemberPath="Description"
+                                              Template="{DynamicResource ComboBoxTemplate}"/>
 
                                     <!--BANK CONNECTION-->
                                     <TextBlock Grid.Row="2" Grid.Column="0" 
