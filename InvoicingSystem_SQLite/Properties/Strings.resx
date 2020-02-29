@@ -159,6 +159,18 @@
   <data name="JobDescription" xml:space="preserve">
     <value>Job description</value>
   </data>
+  <data name="MSG_InvalidFormat" xml:space="preserve">
+    <value>The {0} is not in a valid format.</value>
+  </data>
+  <data name="MSG_InvalidYear" xml:space="preserve">
+    <value>The entered year is not valid. It must be of value in the range of {0} and {1}.</value>
+  </data>
+  <data name="MSG_JobDescriptionEmpty" xml:space="preserve">
+    <value>Job description cannot be empty.</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Name</value>
+  </data>
   <data name="PaymentConditions" xml:space="preserve">
     <value>Payment conditions</value>
   </data>
@@ -178,7 +190,7 @@
     <value>Variable symbol</value>
   </data>
   <data name="VatIdentificationNumber" xml:space="preserve">
-    <value>VATIN</value>
+    <value>input</value>
   </data>
   <data name="VatPayer" xml:space="preserve">
     <value>VAT payer</value>

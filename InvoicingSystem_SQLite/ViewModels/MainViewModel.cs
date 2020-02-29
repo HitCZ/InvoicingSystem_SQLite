@@ -2,6 +2,7 @@
 using InvoicingSystem_SQLite.Logic;
 using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using InvoicingSystem_SQLite.Logic.Extensions;
 
@@ -216,5 +217,6 @@ namespace InvoicingSystem_SQLite.ViewModels
             PaymentMethods = new ObservableCollection<ValueDescription>(EnumExtensions<PaymentMethod>.GetAllValueDescriptions(true));
             SelectedPaymentMethod = PaymentMethod.BankTransfer;
         }
+
     }
 }

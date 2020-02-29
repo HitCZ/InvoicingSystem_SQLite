@@ -11,7 +11,7 @@
             <Setter.Value>
                 <ControlTemplate>
                     <Border BorderThickness="0,0,1,1" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="50,50">
-                        <Grid ShowGridLines="False" HorizontalAlignment="Stretch" VerticalAlignment="Top">
+                        <Grid ShowGridLines="False" HorizontalAlignment="Stretch" VerticalAlignment="Top" DataContext="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:InvoiceControl}}}">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
@@ -62,7 +62,7 @@
                                     <TextBlock Grid.Row="1" Grid.Column="0" 
                                                Text="{Binding Source={x:Static properties:Strings.YourName}, StringFormat={}{0}:}"/>
                                     <TextBox Grid.Row="1" Grid.Column="1" 
-                                             Text="{Binding ContractorName, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" />
+                                             Text="{Binding ContractorName, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"/>
 
                                     <!--CONTRACTOR STREET-->
                                     <TextBlock Grid.Row="2" Grid.Column="0"
@@ -92,7 +92,7 @@
                                     <TextBlock Grid.Row="6" Grid.Column="0" 
                                                Text="{Binding Source={x:Static properties:Strings.IdentificationNumber}, StringFormat={}{0}:}"/>
                                     <TextBox Grid.Row="6" Grid.Column="1" 
-                                             Text="{Binding ContractorIn, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
+                                             Text="{Binding ContractorIN, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
 
                                     <!--CONTRACTOR VAT PAYER-->
                                     <TextBlock Grid.Row="7" Grid.Column="0"

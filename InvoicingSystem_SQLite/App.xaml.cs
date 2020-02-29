@@ -1,6 +1,7 @@
 ﻿using System.Globalization;
 using System.Threading;
 using System.Windows;
+using InvoicingSystem_SQLite.ServiceLocation;
 
 namespace InvoicingSystem_SQLite
 {
@@ -12,6 +13,9 @@ namespace InvoicingSystem_SQLite
         public App()
         {
             Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo("cs-CZ");
+
+            var bootstrapper = new Bootstrapper();
+            bootstrapper.Run();
         }
     }
 }

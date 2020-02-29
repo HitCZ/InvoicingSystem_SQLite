@@ -2,11 +2,23 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:properties="clr-namespace:InvoicingSystem_SQLite.Properties">
 
-    <Thickness x:Key="CommonMargin">0,5</Thickness>
+    <Thickness x:Key="CommonMargin">0,10</Thickness>
 
     <Style TargetType="TextBox">
         <Setter Property="HorizontalAlignment" Value="Stretch"/>
         <Setter Property="Margin" Value="{StaticResource CommonMargin}"/>
+        <Setter Property="Validation.ErrorTemplate">
+            <Setter.Value>
+                <ControlTemplate>
+                    <StackPanel>
+                        <Border BorderBrush="Red" BorderThickness="1" HorizontalAlignment="Left" >
+                            <AdornedElementPlaceholder x:Name="TextBox"/>
+                        </Border>
+                        <TextBlock Text="{Binding [0].ErrorContent}" Foreground="Red" VerticalAlignment="Top" Margin="0"/>
+                    </StackPanel>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
     </Style>
 
     <Style TargetType="Border">

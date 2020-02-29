@@ -122,7 +122,10 @@
     <Compile Include="Logic\Extensions\IEnumerableExtensions.cs" />
     <Compile Include="Logic\Extensions\PropertyInfoExtensions.cs" />
     <Compile Include="Logic\NotificationObject.cs" />
+    <Compile Include="Logic\Validators\DateValidator.cs" />
     <Compile Include="Logic\Validators\DbValidator.cs" />
+    <Compile Include="Logic\Validators\InvoiceValidator.cs" />
+    <Compile Include="Logic\Validators\TextValidator.cs" />
     <Compile Include="Logic\ValueDescription.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\Strings.cs.Designer.cs">

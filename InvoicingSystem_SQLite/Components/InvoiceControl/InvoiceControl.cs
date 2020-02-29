@@ -1,14 +1,23 @@
 ﻿using Invoicing.Enumerations;
 using InvoicingSystem_SQLite.Logic;
+using InvoicingSystem_SQLite.Logic.Validators;
+using Microsoft.Practices.ServiceLocation;
 using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 
 namespace InvoicingSystem_SQLite.Components.InvoiceControl
 {
-    public class InvoiceControl : Control
+    public class InvoiceControl : Control, IDataErrorInfo
     {
+        #region Fields
+
+        private readonly InvoiceValidator validator;
+
+        #endregion Fields
+
         #region Dependency Properties
 
         public ulong InvoiceNumber
@@ -300,8 +309,66 @@ namespace InvoicingSystem_SQLite.Components.InvoiceControl
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(InvoiceControl),
                 new FrameworkPropertyMetadata(typeof(InvoiceControl)));
+
+            validator = ServiceLocator.Current.GetInstance<InvoiceValidator>();
         }
 
         #endregion Constructor
+
+        public string this[string columnName]
+        {
+            get
+            {
+                switch (columnName)
+                {
+                    case nameof(ContractorName):
+                        return validator.ValidateName(ContractorName);
+                    case nameof(ContractorStreet):
+                        return validator.ValidateStreet(ContractorStreet);
+                    case nameof(ContractorBuildingNumber):
+                        return validator.ValidateBuildingNumber(ContractorBuildingNumber);
+                    case nameof(ContractorZipCode):
+                        return validator.ValidateZipCode(ContractorZipCode);
+                    case nameof(ContractorCity):
+                        return validator.ValidateCity(ContractorCity);
+                    case nameof(ContractorIN):
+                        return validator.ValidateIN(ContractorIN);
+                    case nameof(CityOfEvidence):
+                        return validator.ValidateCity(CityOfEvidence);
+                    case nameof(CustomerName):
+                        return validator.ValidateName(CustomerName);
+                    case nameof(CustomerStreet):
+                        return validator.ValidateStreet(CustomerStreet);
+                    case nameof(CustomerBuildingNumber):
+                        return validator.ValidateStreet(CustomerStreet);
+                    case nameof(CustomerZipCode):
+                        return validator.ValidateZipCode(CustomerZipCode);
+                    case nameof(CustomerCity):
+                        return validator.ValidateCity(CustomerCity);
+                    case nameof(CustomerIN):
+                        return validator.ValidateIN(CustomerIN);
+                    case nameof(CustomerVATIN):
+                        return validator.ValidateVATIN(CustomerVATIN);
+                    case nameof(BankConnection):
+                        return validator.ValidateBankConnection(BankConnection);
+                    case nameof(BankAccount):
+                        return validator.ValidateBankAccountNumber(BankAccount);
+                    case nameof(VariableSymbol):
+                        return validator.ValidateVariableSymbol(VariableSymbol);
+                    case nameof(DateOfIssue):
+                        return validator.ValidateDate(DateOfIssue);
+                    case nameof(DueDate):
+                        return validator.ValidateDate(DueDate);
+                    case nameof(JobDescription):
+                        return validator.ValidateJobDescription(JobDescription);
+                    case nameof(IssuedBy):
+                        return validator.ValidateIssuedBy(IssuedBy);
+                    default:
+                        return string.Empty;
+                }
+            }
+        }
+
+        public string Error { get; } = null;
     }
 }

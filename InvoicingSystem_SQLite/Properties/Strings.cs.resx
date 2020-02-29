@@ -159,6 +159,18 @@
   <data name="JobDescription" xml:space="preserve">
     <value>Fakturujeme vám</value>
   </data>
+  <data name="MSG_InvalidFormat" xml:space="preserve">
+    <value>{0} není ve správném formátu.</value>
+  </data>
+  <data name="MSG_InvalidYear" xml:space="preserve">
+    <value>Zadaný rok není platný. Musí být v rozmezí od {0} do {1}.</value>
+  </data>
+  <data name="MSG_JobDescriptionEmpty" xml:space="preserve">
+    <value>Popis práce nesmí být prázdný.</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Jméno</value>
+  </data>
   <data name="PaymentConditions" xml:space="preserve">
     <value>Platební podmínky</value>
   </data>

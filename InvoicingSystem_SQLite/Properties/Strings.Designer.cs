@@ -187,6 +187,42 @@ namespace InvoicingSystem_SQLite.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The {0} is not in a valid format..
+        /// </summary>
+        public static string MSG_InvalidFormat {
+            get {
+                return ResourceManager.GetString("MSG_InvalidFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The entered year is not valid. It must be of value in the range of {0} and {1}..
+        /// </summary>
+        public static string MSG_InvalidYear {
+            get {
+                return ResourceManager.GetString("MSG_InvalidYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Job description cannot be empty..
+        /// </summary>
+        public static string MSG_JobDescriptionEmpty {
+            get {
+                return ResourceManager.GetString("MSG_JobDescriptionEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name.
+        /// </summary>
+        public static string Name {
+            get {
+                return ResourceManager.GetString("Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Payment conditions.
         /// </summary>
         public static string PaymentConditions {
@@ -241,7 +277,7 @@ namespace InvoicingSystem_SQLite.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to VATIN.
+        ///   Looks up a localized string similar to input.
         /// </summary>
         public static string VatIdentificationNumber {
             get {

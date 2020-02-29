@@ -10,6 +10,8 @@ namespace InvoicingSystem_SQLite.Logic.Extensions
 {
     public static class EnumExtensions<T> where T : Enum
     {
+        #region Public Methods
+
         public static List<ValueDescription> GetAllValueDescriptions(bool localizeDescription = false)
         {
             var enumType = typeof(T);
@@ -17,7 +19,7 @@ namespace InvoicingSystem_SQLite.Logic.Extensions
             var result = values.Select(v => new ValueDescription(v, GetEnumDescription(v, localizeDescription))).ToList();
 
             return result;
-        } 
+        }
 
         public static string GetEnumDescription(T value, bool localizeDescription = false)
         {
@@ -33,6 +35,10 @@ namespace InvoicingSystem_SQLite.Logic.Extensions
 
             return localizedDescription ?? description;
         }
+
+        #endregion Public Methods
+
+        #region Private Methods
 
         private static string GetLocalizedDescription(T value)
         {
@@ -59,5 +65,7 @@ namespace InvoicingSystem_SQLite.Logic.Extensions
 
             return !anyAttributes ? value.ToString() : attributes.First().Description;
         }
+
+        #endregion Private Methods
     }
 }
