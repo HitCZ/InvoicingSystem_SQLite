@@ -7,6 +7,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
+using Invoicing.Models;
 
 namespace InvoicingSystem_SQLite.Components.InvoiceControl
 {
@@ -15,6 +16,7 @@ namespace InvoicingSystem_SQLite.Components.InvoiceControl
         #region Fields
 
         private readonly InvoiceValidator validator;
+        private bool shouldValidate;
 
         #endregion Fields
 
@@ -301,6 +303,15 @@ namespace InvoicingSystem_SQLite.Components.InvoiceControl
         public static readonly DependencyProperty TotalProperty =
             DependencyProperty.Register("Total", typeof(string), typeof(InvoiceControl));
 
+        public Currency SelectedCurrency
+        {
+            get => (Currency)GetValue(SelectedCurrencyProperty);
+            set => SetValue(SelectedCurrencyProperty, value);
+        }
+
+        public static readonly DependencyProperty SelectedCurrencyProperty =
+            DependencyProperty.Register("SelectedCurrency", typeof(Currency), typeof(Invoice));
+
         #endregion Dependency Properties
 
         #region Constructor
@@ -311,6 +322,7 @@ namespace InvoicingSystem_SQLite.Components.InvoiceControl
                 new FrameworkPropertyMetadata(typeof(InvoiceControl)));
 
             validator = ServiceLocator.Current.GetInstance<InvoiceValidator>();
+            Loaded += (o, e) => shouldValidate = true;
         }
 
         #endregion Constructor
@@ -319,6 +331,9 @@ namespace InvoicingSystem_SQLite.Components.InvoiceControl
         {
             get
             {
+                if (!shouldValidate)
+                    return string.Empty;
+
                 switch (columnName)
                 {
                     case nameof(ContractorName):
@@ -363,6 +378,8 @@ namespace InvoicingSystem_SQLite.Components.InvoiceControl
                         return validator.ValidateJobDescription(JobDescription);
                     case nameof(IssuedBy):
                         return validator.ValidateIssuedBy(IssuedBy);
+                    case nameof(Total):
+                        return validator.ValidateTotal(Total);
                     default:
                         return string.Empty;
                 }

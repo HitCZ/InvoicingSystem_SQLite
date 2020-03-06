@@ -159,6 +159,9 @@
   <data name="JobDescription" xml:space="preserve">
     <value>Job description</value>
   </data>
+  <data name="MSG_CannotBeEmpty" xml:space="preserve">
+    <value>{0} cannot be empty.</value>
+  </data>
   <data name="MSG_InvalidFormat" xml:space="preserve">
     <value>The {0} is not in a valid format.</value>
   </data>

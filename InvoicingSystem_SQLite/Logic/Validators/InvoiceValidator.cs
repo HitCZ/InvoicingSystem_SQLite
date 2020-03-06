@@ -88,10 +88,13 @@ namespace InvoicingSystem_SQLite.Logic.Validators
         }
 
         public string ValidateJobDescription(string jobDescription) 
-            => jobDescription.IsNullOrEmpty() ? GetInvalidFormatMessage(Strings.JobDescription) : null;
+            => jobDescription.IsNullOrEmpty() ? GetCannotBeEmptyMessage(Strings.JobDescription) : null;
 
         public string ValidateIssuedBy(string issuedBy) 
             => ValidateAlphabeticalString(issuedBy) ? null : GetInvalidFormatMessage(Strings.IssuedBy);
+
+        public string ValidateTotal(string total) 
+            => ValidateNumericString(total) ? null : GetInvalidFormatMessage(Strings.Total);
 
         #endregion Public Methods
 
@@ -102,14 +105,24 @@ namespace InvoicingSystem_SQLite.Logic.Validators
             return string.Format(Strings.MSG_InvalidFormat, invalidPropertyName);
         }
 
+        private string GetCannotBeEmptyMessage(string invalidPropertyName)
+        {
+            return string.Format(Strings.MSG_CannotBeEmpty, invalidPropertyName); 
+        }
+
         private string ValidateAlphabeticalString(string input, string invalidPropertyName)
         {
+            if (input.IsNullOrEmpty())
+                return GetCannotBeEmptyMessage(invalidPropertyName);
+
             var isMatch = ValidateAlphabeticalString(input);
             return isMatch ? null : GetInvalidFormatMessage(invalidPropertyName);
         }
 
         private string ValidateAlphaNumericString(string input, string invalidPropertyName)
         {
+            if (input.IsNullOrEmpty())
+                return GetCannotBeEmptyMessage(invalidPropertyName);
             var isMatch = ValidateAlphaNumericString(input);
             return isMatch ? null : GetInvalidFormatMessage(invalidPropertyName);
         }

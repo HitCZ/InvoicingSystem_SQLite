@@ -159,6 +159,9 @@
   <data name="JobDescription" xml:space="preserve">
     <value>Fakturujeme vám</value>
   </data>
+  <data name="MSG_CannotBeEmpty" xml:space="preserve">
+    <value>Pole {0} nesmí být prázdné.</value>
+  </data>
   <data name="MSG_InvalidFormat" xml:space="preserve">
     <value>{0} není ve správném formátu.</value>
   </data>

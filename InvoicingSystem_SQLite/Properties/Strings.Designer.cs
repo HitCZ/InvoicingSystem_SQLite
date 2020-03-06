@@ -187,6 +187,15 @@ namespace InvoicingSystem_SQLite.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} cannot be empty..
+        /// </summary>
+        public static string MSG_CannotBeEmpty {
+            get {
+                return ResourceManager.GetString("MSG_CannotBeEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The {0} is not in a valid format..
         /// </summary>
         public static string MSG_InvalidFormat {
