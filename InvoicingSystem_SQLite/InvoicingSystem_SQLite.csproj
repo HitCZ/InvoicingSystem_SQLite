@@ -103,6 +103,7 @@
     </ApplicationDefinition>
     <Compile Include="Components\InvoiceControl\InvoiceControl.cs" />
     <Compile Include="Components\NumericTextBox.cs" />
+    <Compile Include="Components\TextBoxWIthHint\TextBoxWithHint.cs" />
     <Compile Include="Components\TextBoxWithNumericFormatting\TextBoxWithNumericFormatting.cs" />
     <Compile Include="DataAccess\QueryExecution\QueryExecutor.cs" />
     <Compile Include="DataAccess\QueryExecution\IQueryExecutor.cs" />
@@ -115,13 +116,16 @@
     <Compile Include="Logic\Comparers\EnumerablePropertyInformationOrderIndependentComparer.cs" />
     <Compile Include="Logic\Comparers\EnumerableStringComparer.cs" />
     <Compile Include="Logic\Comparers\PropertyInformationComparer.cs" />
+    <Compile Include="Logic\Converters\BoolToVisibilityMultiValueConverter.cs" />
     <Compile Include="Logic\Enumerations\PaymentMethodCs.cs" />
     <Compile Include="Logic\Exceptions\InvalidPropertyInformationException.cs" />
     <Compile Include="Logic\Exceptions\TableNotFoundException.cs" />
+    <Compile Include="Logic\Extensions\ArrayExtensions.cs" />
     <Compile Include="Logic\Extensions\EnumExtensions.cs" />
     <Compile Include="Logic\Extensions\IEnumerableExtensions.cs" />
     <Compile Include="Logic\Extensions\PropertyInfoExtensions.cs" />
     <Compile Include="Logic\NotificationObject.cs" />
+    <Compile Include="Logic\RelayCommand.cs" />
     <Compile Include="Logic\Validators\DateValidator.cs" />
     <Compile Include="Logic\Validators\DbValidator.cs" />
     <Compile Include="Logic\Validators\InvoiceValidator.cs" />
@@ -140,6 +144,10 @@
     </Compile>
     <Compile Include="ServiceLocation\Bootstrapper.cs" />
     <Page Include="Components\InvoiceControl\InvoiceControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Components\TextBoxWIthHint\TextBoxWithHint.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

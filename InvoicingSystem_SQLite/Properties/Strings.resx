@@ -147,6 +147,9 @@
   <data name="DueDate" xml:space="preserve">
     <value>Due date</value>
   </data>
+  <data name="FirstName" xml:space="preserve">
+    <value>First name</value>
+  </data>
   <data name="IdentificationNumber" xml:space="preserve">
     <value>IN</value>
   </data>
@@ -158,6 +161,9 @@
   </data>
   <data name="JobDescription" xml:space="preserve">
     <value>Job description</value>
+  </data>
+  <data name="LastName" xml:space="preserve">
+    <value>Last name</value>
   </data>
   <data name="MSG_CannotBeEmpty" xml:space="preserve">
     <value>{0} cannot be empty.</value>
@@ -174,11 +180,17 @@
   <data name="Name" xml:space="preserve">
     <value>Name</value>
   </data>
+  <data name="Optional" xml:space="preserve">
+    <value>Optional</value>
+  </data>
   <data name="PaymentConditions" xml:space="preserve">
     <value>Payment conditions</value>
   </data>
   <data name="PaymentMethod" xml:space="preserve">
     <value>Payment method</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Save</value>
   </data>
   <data name="SelectDate" xml:space="preserve">
     <value>Select a date</value>

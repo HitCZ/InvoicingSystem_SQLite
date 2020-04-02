@@ -1,6 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="../Components/InvoiceControl/InvoiceControl.xaml"/>
+        <ResourceDictionary Source="../Components/TextBoxWIthHint/TextBoxWithHint.xaml"/>
         <ResourceDictionary Source="../Styles.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>

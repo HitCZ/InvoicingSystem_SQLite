@@ -213,7 +213,7 @@ namespace InvoicingSystem_SQLite.Annotations
   /// 
   ///   public string Name {
   ///     get { return _name; }
-  ///     set { _name = value; NotifyChanged("LastName"); /* Warning */ }
+  ///     set { _name = value; NotifyChanged("ContractorLastName"); /* Warning */ }
   ///   }
   /// }
   /// </code>

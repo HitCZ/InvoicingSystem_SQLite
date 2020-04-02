@@ -1,10 +1,10 @@
 ﻿using Invoicing.Enumerations;
+using Invoicing.Models;
 using InvoicingSystem_SQLite.Logic;
+using InvoicingSystem_SQLite.Logic.Extensions;
 using System;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Linq;
-using InvoicingSystem_SQLite.Logic.Extensions;
+using System.Windows.Input;
 
 namespace InvoicingSystem_SQLite.ViewModels
 {
@@ -14,13 +14,19 @@ namespace InvoicingSystem_SQLite.ViewModels
 
         #region Contractor
 
-        public ulong InvoiceNumber
+        public uint InvoiceNumber
         {
-            get => GetPropertyValue<ulong>();
+            get => GetPropertyValue<uint>();
             set => SetPropertyValue(value);
         }
 
-        public string ContractorName
+        public string ContractorFirstName
+        {
+            get => GetPropertyValue<string>();
+            set => SetPropertyValue(value);
+        }
+
+        public string ContractorLastName
         {
             get => GetPropertyValue<string>();
             set => SetPropertyValue(value);
@@ -203,11 +209,24 @@ namespace InvoicingSystem_SQLite.ViewModels
 
         #endregion Other
 
+        public Func<bool> ValidateFunc
+        {
+            get => GetPropertyValue<Func<bool>>();
+            set => SetPropertyValue(value);
+        }
+
         #endregion Properties
+
+        #region Commands
+
+        public ICommand SaveCommand { get; set; }
+
+        #endregion Commands
 
         public MainViewModel()
         {
             Initialize();
+            InitializeCommands();
         }
 
         private void Initialize()
@@ -218,5 +237,87 @@ namespace InvoicingSystem_SQLite.ViewModels
             SelectedPaymentMethod = PaymentMethod.BankTransfer;
         }
 
+        private void InitializeCommands()
+        {
+            SaveCommand = new RelayCommand(SaveCommandExecute, SaveCommandCanExecute);
+        }
+
+        private void SaveCommandExecute()
+        {
+            var invoice = SetupInvoiceObject();
+        }
+
+        private bool SaveCommandCanExecute() => ValidateFunc();
+
+        private Invoice SetupInvoiceObject()
+        {
+            var invoice = new Invoice(null)
+            {
+                BankInformation = SetupBankInformationObject(),
+                Contractor = SetupContractorObject(),
+                Customer = SetupCustomerObject(),
+                PaymentMethod = SelectedPaymentMethod,
+                Currency = SelectedCurrency,
+                DueDate = SelectedDueDate,
+                DateOfIssue = SelectedDateOfIssue,
+                JobDescription = JobDescription,
+                InvoiceNumber = InvoiceNumber,
+                Price = Total.ConvertToDecimal() ?? 0
+            };
+
+            return invoice;
+        }
+
+        private Customer SetupCustomerObject()
+        {
+            var result = new Customer(null)
+            {
+                Address = new Address(null)
+                {
+                    ZipCode = CustomerZipCode,
+                    BuildingNumber = CustomerBuildingNumber,
+                    Street = CustomerStreet,
+                    City = CustomerCity
+                },
+                CorporationName = CustomerName,
+                IN = (int) CustomerIN,
+                VATIN = CustomerVATIN
+            };
+
+            return result;
+        }
+
+        private BankInformation SetupBankInformationObject()
+        {
+            var result = new BankInformation(null)
+            {
+                AccountNumber = BankAccount,
+                VariableSymbol = VariableSymbol,
+                BankConnection = BankConnection
+            };
+
+            return result;
+        }
+
+        private Contractor SetupContractorObject()
+        {
+            var result = new Contractor(null)
+            {
+                Address = new Address(null)
+                {
+                    BuildingNumber = ContractorBuildingNumber,
+                    City = ContractorCity,
+                    ZipCode = ContractorZipCode,
+                    Street = ContractorStreet
+                },
+                IN = (int) ContractorIN,
+                CityOfEvidence = ContractorCity,
+                FirstName = ContractorFirstName,
+                LastName = ContractorLastName,
+                IsVatPayer = IsVATPayer
+            };
+
+            return result;
+        }
     }
 }

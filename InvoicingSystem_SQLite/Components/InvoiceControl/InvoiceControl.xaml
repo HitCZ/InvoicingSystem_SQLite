@@ -3,14 +3,15 @@
                     xmlns:local="clr-namespace:InvoicingSystem_SQLite.Components.InvoiceControl"
                     xmlns:properties="clr-namespace:InvoicingSystem_SQLite.Properties"
                     xmlns:textBoxWithNumericFormatting="clr-namespace:InvoicingSystem_SQLite.Components.TextBoxWithNumericFormatting"
-                    xmlns:components="clr-namespace:InvoicingSystem_SQLite.Components">
+                    xmlns:components="clr-namespace:InvoicingSystem_SQLite.Components"
+                    xmlns:textBoxWithHint="clr-namespace:InvoicingSystem_SQLite.Components.TextBoxWIthHint">
 
     <Style TargetType="local:InvoiceControl">
         <Setter Property="DataContext" Value="{Binding RelativeSource={RelativeSource Self}}"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate>
-                    <Border BorderThickness="0,0,1,1" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="50,50">
+                    <Border BorderThickness="0,0,1,1" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="25,10">
                         <Grid ShowGridLines="False" HorizontalAlignment="Stretch" VerticalAlignment="Top" DataContext="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:InvoiceControl}}}">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
@@ -59,10 +60,16 @@
                                                Text="{x:Static properties:Strings.Contractor}" FontWeight="Bold"/>
 
                                     <!-- CONTRACTOR NAME-->
+
                                     <TextBlock Grid.Row="1" Grid.Column="0" 
                                                Text="{Binding Source={x:Static properties:Strings.YourName}, StringFormat={}{0}:}"/>
-                                    <TextBox Grid.Row="1" Grid.Column="1" 
-                                             Text="{Binding ContractorName, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"/>
+                                    <DockPanel Grid.Row="1" Grid.Column="1">
+                                        <textBoxWithHint:TextBoxWithHint DockPanel.Dock="Left" HintText="{x:Static properties:Strings.FirstName}"
+                                             Text="{Binding ContractorFirstName, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"/>
+                                        <textBoxWithHint:TextBoxWithHint DockPanel.Dock="Right" HintText="{x:Static properties:Strings.LastName}"
+                                             Text="{Binding ContractorLastName, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"
+                                             Margin="10,0,0,0"/>
+                                    </DockPanel>
 
                                     <!--CONTRACTOR STREET-->
                                     <TextBlock Grid.Row="2" Grid.Column="0"
@@ -212,7 +219,7 @@
                                     <!--BANK CONNECTION-->
                                     <TextBlock Grid.Row="2" Grid.Column="0" 
                                                Text="{Binding Source={x:Static properties:Strings.BankConnection}, StringFormat={}{0}:}"/>
-                                    <TextBox Grid.Row="2" Grid.Column="1"
+                                    <textBoxWithHint:TextBoxWithHint Grid.Row="2" Grid.Column="1" HintText="{x:Static properties:Strings.Optional}"
                                              Text="{Binding BankConnection, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
 
                                     <!--BANK ACCOUNT NUMBER-->

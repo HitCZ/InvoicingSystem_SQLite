@@ -151,6 +151,15 @@ namespace InvoicingSystem_SQLite.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to First name.
+        /// </summary>
+        public static string FirstName {
+            get {
+                return ResourceManager.GetString("FirstName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to IN.
         /// </summary>
         public static string IdentificationNumber {
@@ -183,6 +192,15 @@ namespace InvoicingSystem_SQLite.Properties {
         public static string JobDescription {
             get {
                 return ResourceManager.GetString("JobDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Last name.
+        /// </summary>
+        public static string LastName {
+            get {
+                return ResourceManager.GetString("LastName", resourceCulture);
             }
         }
         
@@ -232,6 +250,15 @@ namespace InvoicingSystem_SQLite.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Optional.
+        /// </summary>
+        public static string Optional {
+            get {
+                return ResourceManager.GetString("Optional", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Payment conditions.
         /// </summary>
         public static string PaymentConditions {
@@ -246,6 +273,15 @@ namespace InvoicingSystem_SQLite.Properties {
         public static string PaymentMethod {
             get {
                 return ResourceManager.GetString("PaymentMethod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save.
+        /// </summary>
+        public static string Save {
+            get {
+                return ResourceManager.GetString("Save", resourceCulture);
             }
         }
         

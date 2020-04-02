@@ -1,13 +1,15 @@
 ﻿using Invoicing.Enumerations;
+using Invoicing.Models;
 using InvoicingSystem_SQLite.Logic;
+using InvoicingSystem_SQLite.Logic.Extensions;
 using InvoicingSystem_SQLite.Logic.Validators;
 using Microsoft.Practices.ServiceLocation;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using Invoicing.Models;
 
 namespace InvoicingSystem_SQLite.Components.InvoiceControl
 {
@@ -33,15 +35,23 @@ namespace InvoicingSystem_SQLite.Components.InvoiceControl
 
         #region Contractor
 
-        public string ContractorName
+        public string ContractorFirstName
         {
-            get => (string)GetValue(ContractorNameProperty);
-            set => SetValue(ContractorNameProperty, value);
+            get => (string)GetValue(ContractorFirstNameProperty);
+            set => SetValue(ContractorFirstNameProperty, value);
         }
 
-        public static readonly DependencyProperty ContractorNameProperty =
-            DependencyProperty.Register("ContractorName", typeof(string), typeof(InvoiceControl));
+        public static readonly DependencyProperty ContractorFirstNameProperty =
+            DependencyProperty.Register("ContractorFirstName", typeof(string), typeof(InvoiceControl));
 
+        public string ContractorLastName
+        {
+            get => (string)GetValue(ContractorLastNameProperty);
+            set => SetValue(ContractorLastNameProperty, value);
+        }
+
+        public static readonly DependencyProperty ContractorLastNameProperty =
+            DependencyProperty.Register("ContractorLastName", typeof(string), typeof(InvoiceControl));
 
         public string ContractorStreet
         {
@@ -331,13 +341,15 @@ namespace InvoicingSystem_SQLite.Components.InvoiceControl
         {
             get
             {
-                if (!shouldValidate)
-                    return string.Empty;
+                //if (!shouldValidate)
+                //    return string.Empty;
 
                 switch (columnName)
                 {
-                    case nameof(ContractorName):
-                        return validator.ValidateName(ContractorName);
+                    case nameof(ContractorFirstName):
+                        return validator.ValidateName(ContractorFirstName);
+                    case nameof(ContractorLastName):
+                        return validator.ValidateName(ContractorLastName);
                     case nameof(ContractorStreet):
                         return validator.ValidateStreet(ContractorStreet);
                     case nameof(ContractorBuildingNumber):
@@ -387,5 +399,12 @@ namespace InvoicingSystem_SQLite.Components.InvoiceControl
         }
 
         public string Error { get; } = null;
+
+        public bool Validate()
+        {
+            var properties = typeof(InvoiceControl).GetProperties();
+
+            return properties.Any(x => !this[x.Name].IsNullOrEmpty());
+        }
     }
 }

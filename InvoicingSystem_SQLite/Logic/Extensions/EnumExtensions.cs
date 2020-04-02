@@ -17,7 +17,7 @@ namespace InvoicingSystem_SQLite.Logic.Extensions
             var enumType = typeof(T);
             var values = Enum.GetValues(enumType).OfType<T>().ToList();
             var result = values.Select(v => new ValueDescription(v, GetEnumDescription(v, localizeDescription))).ToList();
-
+            
             return result;
         }
 

@@ -5,18 +5,28 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:invoiceControl="clr-namespace:InvoicingSystem_SQLite.Components.InvoiceControl"
         xmlns:views="clr-namespace:InvoicingSystem_SQLite.Views"
+        xmlns:properties="clr-namespace:InvoicingSystem_SQLite.Properties"
+        xmlns:textBoxWIthHint="clr-namespace:InvoicingSystem_SQLite.Components.TextBoxWIthHint"
         mc:Ignorable="d"
         Title="MainView" Height="900" Width="1000" MinWidth="500" MinHeight="500">
-    <Grid>
-        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-            <invoiceControl:InvoiceControl
+    <DockPanel>
+        <ToolBarTray DockPanel.Dock="Top" DataContext="{Binding ViewModel, RelativeSource= {RelativeSource AncestorType=views:MainView}}">
+            <ToolBar>
+                <Button Content="{x:Static properties:Strings.Save}" Command="{Binding SaveCommand}"/>
+            </ToolBar>
+        </ToolBarTray>
+        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" 
+                      DockPanel.Dock="Bottom">
+            <invoiceControl:InvoiceControl x:Name="InvoiceControl"
                 DataContext="{Binding ViewModel, RelativeSource={RelativeSource AncestorType=views:MainView}}"
                 InvoiceNumber="{Binding InvoiceNumber}"
-                ContractorName="{Binding ContractorName}"
+                ContractorFirstName="{Binding ContractorFirstName}"
+                ContractorLastName="{Binding ContractorLastName}"
                 ContractorStreet="{Binding ContractorStreet}"
                 ContractorBuildingNumber="{Binding ContractorBuildingNumber}"
                 ContractorZipCode="{Binding ContractorZipCode}"
                 ContractorIN="{Binding ContractorIN}"
+                ContractorCity="{Binding ContractorCity}"
                 IsVATPayer="{Binding IsVATPayer}"
                 CityOfEvidence="{Binding CityOfEvidence}"
                 CustomerName="{Binding CustomerName}"
@@ -38,5 +48,5 @@
                 Total="{Binding Total}"
                 SelectedPaymentMethod="{Binding SelectedPaymentMethod}"/>
         </ScrollViewer>
-    </Grid>
+    </DockPanel>
 </Window>

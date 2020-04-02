@@ -150,7 +150,7 @@ namespace InvoicingSystem_SQLite.DataAccess.SQL
         }
 
         /// <summary>
-        /// Returns strings in format "PropertyName = value" (e.g. FirstName = "John"), without ID and <see cref="IDatabaseStorableObject"/> types.
+        /// Returns strings in format "PropertyName = value" (e.g. ContractorFirstName = "John"), without ID and <see cref="IDatabaseStorableObject"/> types.
         /// </summary>
         protected virtual IEnumerable<string> GetJoinedChangesForUpdate(T item)
         {

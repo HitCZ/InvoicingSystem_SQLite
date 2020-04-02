@@ -15,7 +15,7 @@ namespace InvoicingSystem_SQLite.Views
 
         public MainView()
         {
-            ViewModel = new MainViewModel();
+            ViewModel = new MainViewModel { ValidateFunc = () => InvoiceControl.Validate() };
             InitializeComponent();
         }
     }

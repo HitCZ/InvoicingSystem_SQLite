@@ -147,6 +147,9 @@
   <data name="DueDate" xml:space="preserve">
     <value>Datum splatnosti</value>
   </data>
+  <data name="FirstName" xml:space="preserve">
+    <value>Křestní jméno</value>
+  </data>
   <data name="IdentificationNumber" xml:space="preserve">
     <value>IČ</value>
   </data>
@@ -158,6 +161,9 @@
   </data>
   <data name="JobDescription" xml:space="preserve">
     <value>Fakturujeme vám</value>
+  </data>
+  <data name="LastName" xml:space="preserve">
+    <value>Příjmení</value>
   </data>
   <data name="MSG_CannotBeEmpty" xml:space="preserve">
     <value>Pole {0} nesmí být prázdné.</value>
@@ -174,11 +180,17 @@
   <data name="Name" xml:space="preserve">
     <value>Jméno</value>
   </data>
+  <data name="Optional" xml:space="preserve">
+    <value>Nepovinné</value>
+  </data>
   <data name="PaymentConditions" xml:space="preserve">
     <value>Platební podmínky</value>
   </data>
   <data name="PaymentMethod" xml:space="preserve">
     <value>Forma úhrady</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Uložit</value>
   </data>
   <data name="SelectDate" xml:space="preserve">
     <value>Vybrat datum</value>
