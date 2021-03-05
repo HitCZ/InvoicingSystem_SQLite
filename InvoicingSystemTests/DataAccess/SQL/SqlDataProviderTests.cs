@@ -24,8 +24,8 @@ namespace InvoicingSystemTests.DataAccess.SQL
         private ITypeToTableMappingManager typeToTableMappingManager;
 
         private TestDataProvider provider;
-        private EnumerableStringComparer enumerableStringComparer;
-        private EnumerablePropertyInformationOrderIndependentComparer enumerablePropertyInformationComparer;
+        private EnumerableStringEqualityComparer enumerableStringComparer;
+        private EnumerablePropertyInformationEqualityComparer enumerablePropertyInformationComparer;
         private TestModel testModel;
 
         [TestInitialize]
@@ -39,8 +39,8 @@ namespace InvoicingSystemTests.DataAccess.SQL
             typeToTableMappingManager = typeToTableMappingManagerMock.Object;
 
             provider = new TestDataProvider(queryExecutor, typeToTableMappingManager);
-            enumerableStringComparer = new EnumerableStringComparer();
-            enumerablePropertyInformationComparer = new EnumerablePropertyInformationOrderIndependentComparer();
+            enumerableStringComparer = new EnumerableStringEqualityComparer();
+            enumerablePropertyInformationComparer = new EnumerablePropertyInformationEqualityComparer();
             testModel = new TestModel(1)
             {
                 FirstName = "John",
@@ -71,7 +71,7 @@ namespace InvoicingSystemTests.DataAccess.SQL
             var expected = new List<string> { "FirstName = \"John\"", "LastName = \"Doe\"", "ZipCode = \"27351\"" };
 
             var actual = provider.GetJoinedChangesForUpdate(testModel);
-            var areEqual = enumerableStringComparer.Compare(expected, actual) == 0;
+            var areEqual = enumerableStringComparer.Equals(expected, actual);
 
             Assert.IsTrue(areEqual);
         }
@@ -115,7 +115,7 @@ namespace InvoicingSystemTests.DataAccess.SQL
             };
 
             var actual = provider.GetPropertiesInformation(testModel);
-            var areEqual = enumerablePropertyInformationComparer.Compare(expected, actual) == 0;
+            var areEqual = enumerablePropertyInformationComparer.Equals(expected, actual);
 
             Assert.IsTrue(areEqual);
         }
@@ -128,7 +128,7 @@ namespace InvoicingSystemTests.DataAccess.SQL
                 new List<string> { "FirstName", "LastName", "ZipCode" },
                 new List<object> { "John", "Doe", (uint)27351 });
             
-            var areEqual = enumerableStringComparer.Compare(expected, actual) == 0;
+            var areEqual = enumerableStringComparer.Equals(expected, actual);
 
             Assert.IsTrue(areEqual);
         }

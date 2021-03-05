@@ -1,16 +1,15 @@
-﻿using Invoicing.Enumerations;
+﻿using FluentAssertions;
+using Invoicing.Enumerations;
 using Invoicing.Models;
 using InvoicingSystem_SQLite.DataAccess.QueryExecution;
 using InvoicingSystem_SQLite.DataAccess.SQL;
 using InvoicingSystem_SQLite.Logic.Comparers;
+using InvoicingSystemTests.Mocks;
 using Microsoft.Practices.ServiceLocation;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
 using System.Collections.Generic;
-using FluentAssertions;
-using InvoicingSystem_SQLite.Logic.Constants;
-using InvoicingSystemTests.Mocks;
 
 namespace InvoicingSystemTests.DataAccess.SQL
 {
@@ -22,7 +21,7 @@ namespace InvoicingSystemTests.DataAccess.SQL
         private const string JOB_DESCRIPTION = "blablabla";
         private Invoice invoice;
         private TestInvoiceDataProvider provider;
-        private EnumerableStringComparer comparer;
+        private EnumerableStringEqualityComparer comparer;
         private Mock<ISqlDataProvider<Customer>> customerProviderMock;
         private Mock<ISqlDataProvider<Contractor>> contractorProviderMock;
         private Mock<ISqlDataProvider<BankInformation>> bankInformationProviderMock;
@@ -69,7 +68,7 @@ namespace InvoicingSystemTests.DataAccess.SQL
                 contractorProviderMock.Object,
                 bankInformationProviderMock.Object
             );
-            comparer = new EnumerableStringComparer();
+            comparer = new EnumerableStringEqualityComparer();
         }
 
         #endregion Test Initialize
@@ -158,7 +157,7 @@ namespace InvoicingSystemTests.DataAccess.SQL
             };
 
             var actual = provider.GetJoinedChangesForUpdate(invoice);
-            var areEqual = comparer.Compare(expected, actual) == 0;
+            var areEqual = comparer.Equals(expected, actual);
             Assert.IsTrue(areEqual);
         }
 

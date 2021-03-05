@@ -3,20 +3,20 @@ using System.Linq;
 
 namespace InvoicingSystem_SQLite.Logic.Comparers
 {
-    public  class EnumerableStringComparer : IComparer<IEnumerable<string>>
+    public class EnumerableStringEqualityComparer : IEqualityComparer<IEnumerable<string>>
     {
-        public int Compare(IEnumerable<string> x, IEnumerable<string> y)
+        public bool Equals(IEnumerable<string> x, IEnumerable<string> y)
         {
-            if (x is null && y is null)
-                return 0;
+            if (ReferenceEquals(x, y))
+                return true;
             if (x is null ^ y is null)
-                return -1;
+                return false;
 
             var xList = x.ToList();
             var yList = y.ToList();
 
             if (xList.Count != yList.Count)
-                return -1;
+                return false;
 
             for (var i = 0; i < xList.Count; i++)
             {
@@ -24,10 +24,15 @@ namespace InvoicingSystem_SQLite.Logic.Comparers
                 var yItem = yList[i];
 
                 if (xItem != yItem)
-                    return -1;
+                    return false;
             }
 
-            return 0;
+            return true;
+        }
+
+        public int GetHashCode(IEnumerable<string> obj)
+        {
+            return obj.GetHashCode();
         }
     }
 }

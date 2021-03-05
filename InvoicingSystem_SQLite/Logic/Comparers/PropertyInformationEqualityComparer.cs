@@ -4,14 +4,14 @@ using InvoicingSystem_SQLite.Logic.Extensions;
 
 namespace InvoicingSystem_SQLite.Logic.Comparers
 {
-    public class PropertyInformationComparer : IComparer<PropertyInformation>
+    public class PropertyInformationEqualityComparer : IEqualityComparer<PropertyInformation>
     {
-        public int Compare(PropertyInformation x, PropertyInformation y)
+        public bool Equals(PropertyInformation x, PropertyInformation y)
         {
-            if (x is null && y is null)
-                return 0;
+            if (ReferenceEquals(x, y))
+                return true;
             if (x is null ^ y is null)
-                return -1;
+                return false;
 
             var columnNameEquals = x.ColumnName == y.ColumnName;
             bool valueEquals;
@@ -22,8 +22,13 @@ namespace InvoicingSystem_SQLite.Logic.Comparers
                 valueEquals = x.Value == y.Value;
 
             if (columnNameEquals && valueEquals)
-                return 0;
-            return -1;
+                return true;
+            return false;
+        }
+
+        public int GetHashCode(PropertyInformation obj)
+        {
+            return obj.GetHashCode();
         }
     }
 }

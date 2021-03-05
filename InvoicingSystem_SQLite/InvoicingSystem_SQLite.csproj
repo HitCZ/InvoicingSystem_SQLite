@@ -119,9 +119,9 @@
     <Compile Include="DataAccess\SQL\InvoiceDataProvider.cs" />
     <Compile Include="DataAccess\SQL\SqlDataProvider.cs" />
     <Compile Include="DataAccess\SQL\TypeToTableMappingManager.cs" />
-    <Compile Include="Logic\Comparers\EnumerablePropertyInformationOrderIndependentComparer.cs" />
-    <Compile Include="Logic\Comparers\EnumerableStringComparer.cs" />
-    <Compile Include="Logic\Comparers\PropertyInformationComparer.cs" />
+    <Compile Include="Logic\Comparers\EnumerablePropertyInformationEqualityComparer.cs" />
+    <Compile Include="Logic\Comparers\EnumerableStringEqualityComparer.cs" />
+    <Compile Include="Logic\Comparers\PropertyInformationEqualityComparer.cs" />
     <Compile Include="Logic\Constants\Constants.cs" />
     <Compile Include="Logic\Converters\BoolToVisibilityMultiValueConverter.cs" />
     <Compile Include="Logic\Enumerations\PaymentMethodCs.cs" />
