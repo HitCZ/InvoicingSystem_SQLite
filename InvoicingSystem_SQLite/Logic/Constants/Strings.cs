@@ -1,4 +1,4 @@
-﻿namespace InvoicingSystem.Logic.Constants
+﻿namespace InvoicingSystem_SQLite.Logic.Constants
 {
     public static class Strings
     {

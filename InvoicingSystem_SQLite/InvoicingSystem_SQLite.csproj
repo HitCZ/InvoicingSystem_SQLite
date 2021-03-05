@@ -41,11 +41,14 @@
     <StartupObject>InvoicingSystem_SQLite.App</StartupObject>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Common">
+      <HintPath>C:\Users\lukas\Dropbox\CSharp projekty\!Libraries\Common\Common.dll</HintPath>
+    </Reference>
     <Reference Include="Dapper, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Dapper.2.0.30\lib\net461\Dapper.dll</HintPath>
     </Reference>
-    <Reference Include="EPPlus, Version=4.5.3.2, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
-      <HintPath>..\packages\EPPlus.4.5.3.2\lib\net40\EPPlus.dll</HintPath>
+    <Reference Include="EPPlus, Version=5.2.1.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPPlus.5.2.1\lib\net45\EPPlus.dll</HintPath>
     </Reference>
     <Reference Include="Invoicing, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -80,6 +83,7 @@
       <HintPath>..\packages\System.IO.Packaging.4.0.0\lib\net46\System.IO.Packaging.dll</HintPath>
     </Reference>
     <Reference Include="System.Security" />
+    <Reference Include="System.Threading.Tasks" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Prism.Wpf.6.3.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
     </Reference>
@@ -107,15 +111,18 @@
     <Compile Include="Components\TextBoxWithNumericFormatting\TextBoxWithNumericFormatting.cs" />
     <Compile Include="DataAccess\QueryExecution\QueryExecutor.cs" />
     <Compile Include="DataAccess\QueryExecution\IQueryExecutor.cs" />
+    <Compile Include="DataAccess\SQL\ContractorDataProvider.cs" />
+    <Compile Include="DataAccess\SQL\CustomerDataProvider.cs" />
+    <Compile Include="DataAccess\SQL\ISqlDataProvider.cs" />
     <Compile Include="DataAccess\SQL\ITypeToTableMappingManager.cs" />
     <Compile Include="DataAccess\SQL\PropertyInformation.cs" />
     <Compile Include="DataAccess\SQL\InvoiceDataProvider.cs" />
     <Compile Include="DataAccess\SQL\SqlDataProvider.cs" />
-    <Compile Include="DataAccess\SQL\SqlProviderFactory.cs" />
     <Compile Include="DataAccess\SQL\TypeToTableMappingManager.cs" />
     <Compile Include="Logic\Comparers\EnumerablePropertyInformationOrderIndependentComparer.cs" />
     <Compile Include="Logic\Comparers\EnumerableStringComparer.cs" />
     <Compile Include="Logic\Comparers\PropertyInformationComparer.cs" />
+    <Compile Include="Logic\Constants\Constants.cs" />
     <Compile Include="Logic\Converters\BoolToVisibilityMultiValueConverter.cs" />
     <Compile Include="Logic\Enumerations\PaymentMethodCs.cs" />
     <Compile Include="Logic\Exceptions\InvalidPropertyInformationException.cs" />
@@ -123,9 +130,12 @@
     <Compile Include="Logic\Extensions\ArrayExtensions.cs" />
     <Compile Include="Logic\Extensions\EnumExtensions.cs" />
     <Compile Include="Logic\Extensions\IEnumerableExtensions.cs" />
+    <Compile Include="Logic\Extensions\ObjectExtensions.cs" />
     <Compile Include="Logic\Extensions\PropertyInfoExtensions.cs" />
     <Compile Include="Logic\NotificationObject.cs" />
+    <Compile Include="Logic\Providers\PropertyInfoFilterProvider.cs" />
     <Compile Include="Logic\RelayCommand.cs" />
+    <Compile Include="Logic\TestData\InvoiceMocksProvider.cs" />
     <Compile Include="Logic\Validators\DateValidator.cs" />
     <Compile Include="Logic\Validators\DbValidator.cs" />
     <Compile Include="Logic\Validators\InvoiceValidator.cs" />
@@ -205,7 +215,7 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <Content Include="Database\Invoicing.db">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">

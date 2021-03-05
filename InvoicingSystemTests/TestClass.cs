@@ -8,6 +8,6 @@ namespace InvoicingSystemTests
         [NotInDatabase]
         public string NotInDb { get; set; }
         public string InDb { get; set; }
-        public int? Id { get; }
+        public long? Id { get; }
     }
 }

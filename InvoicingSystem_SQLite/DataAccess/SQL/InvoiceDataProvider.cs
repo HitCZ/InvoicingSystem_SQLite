@@ -2,25 +2,43 @@
 using Invoicing.Models;
 using InvoicingSystem_SQLite.DataAccess.QueryExecution;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.Linq;
 using System.Text;
 
 namespace InvoicingSystem_SQLite.DataAccess.SQL
 {
+    [Export(nameof(InvoiceDataProvider), typeof(ISqlDataProvider<Invoice>))]
     public class InvoiceDataProvider : SqlDataProvider<Invoice>
     {
-        private const string VALUE_SEPARATOR = ", ";
-        private readonly SqlDataProvider<BankInformation> bankInformationProvider;
-        private readonly SqlDataProvider<Customer> customerProvider;
-        private readonly SqlDataProvider<Contractor> contractorProvider;
+        #region Fields
 
-        public InvoiceDataProvider(IQueryExecutor queryExecutor, ITypeToTableMappingManager typeToTableMappingManager) 
+        private const string VALUE_SEPARATOR = ", ";
+        private readonly ISqlDataProvider<BankInformation> bankInformationProvider;
+        private readonly ISqlDataProvider<Customer> customerProvider;
+        private readonly ISqlDataProvider<Contractor> contractorProvider;
+
+        #endregion Fields
+
+        #region Constructor
+
+        [ImportingConstructor]
+        public InvoiceDataProvider
+        (
+            IQueryExecutor queryExecutor,
+            ITypeToTableMappingManager typeToTableMappingManager,
+            [Import(nameof(CustomerDataProvider), typeof(ISqlDataProvider<Customer>))] ISqlDataProvider<Customer> customerProvider,
+            [Import(nameof(ContractorDataProvider), typeof(ISqlDataProvider<Contractor>))] ISqlDataProvider<Contractor> contractorProvider,
+            ISqlDataProvider<BankInformation> bankInformationProvider
+        )
             : base(queryExecutor, typeToTableMappingManager)
         {
-            bankInformationProvider = SqlProviderFactory<BankInformation>.GetProvider();
-            customerProvider = SqlProviderFactory<Customer>.GetProvider();
-            contractorProvider = SqlProviderFactory<Contractor>.GetProvider();
+            this.bankInformationProvider = bankInformationProvider;
+            this.customerProvider = customerProvider;
+            this.contractorProvider = contractorProvider;
         }
+
+        #endregion Constructor
 
         #region Overriden Methods
 
@@ -28,10 +46,7 @@ namespace InvoicingSystem_SQLite.DataAccess.SQL
         {
             EnsureDependenciesAreSet(item);
 
-            var query = !item.Id.HasValue ? GetInsertQuery(item) : GetUpdateQuery(item);
-            var success = queryExecutor.ExecuteQueryWithFeedback(query);
-
-            return (query, success);
+            return base.CreateOrUpdate(item);
         }
 
         protected override IEnumerable<string> GetJoinedChangesForUpdate(Invoice item)
@@ -77,6 +92,8 @@ namespace InvoicingSystem_SQLite.DataAccess.SQL
             var bankInfo = item.BankInformation;
             var customer = item.Customer;
             var contractor = item.Contractor;
+            var customerAddress = item.Customer?.Address;
+            var contractorAddress = item.Contractor?.Address;
 
             if (bankInfo is null)
                 throw new ArgumentNullException(nameof(bankInfo));
@@ -84,6 +101,10 @@ namespace InvoicingSystem_SQLite.DataAccess.SQL
                 throw new ArgumentNullException(nameof(customer));
             if (contractor is null)
                 throw new ArgumentNullException(nameof(contractor));
+            if (customerAddress is null)
+                throw new ArgumentNullException(nameof(customerAddress));
+            if (contractorAddress is null)
+                throw new ArgumentNullException(nameof(contractorAddress));
 
             if (!bankInfo.Id.HasValue)
             {

@@ -1,15 +1,25 @@
 ﻿using Invoicing.Enumerations;
 using Invoicing.Models;
+using InvoicingSystem_SQLite.DataAccess.SQL;
 using InvoicingSystem_SQLite.Logic;
 using InvoicingSystem_SQLite.Logic.Extensions;
+using InvoicingSystem_SQLite.Logic.TestData;
 using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel.Composition;
 using System.Windows.Input;
 
 namespace InvoicingSystem_SQLite.ViewModels
 {
+    [Export, PartCreationPolicy(CreationPolicy.NonShared)]
     public class MainViewModel : ViewModelBase
     {
+        #region Fields
+
+        private readonly ISqlDataProvider<Invoice> invoiceDataProvider;
+
+        #endregion Fields
+
         #region Properties
 
         #region Contractor
@@ -223,10 +233,13 @@ namespace InvoicingSystem_SQLite.ViewModels
 
         #endregion Commands
 
-        public MainViewModel()
+        [ImportingConstructor]
+        public MainViewModel([Import(nameof(InvoiceDataProvider), typeof(ISqlDataProvider<Invoice>))] ISqlDataProvider<Invoice> invoiceDataProvider)
         {
             Initialize();
             InitializeCommands();
+
+            this.invoiceDataProvider = invoiceDataProvider;
         }
 
         private void Initialize()
@@ -245,13 +258,15 @@ namespace InvoicingSystem_SQLite.ViewModels
         private void SaveCommandExecute()
         {
             var invoice = SetupInvoiceObject();
+
+            var response = invoiceDataProvider.CreateOrUpdate(InvoiceMocksProvider.GetInvoice());
         }
 
         private bool SaveCommandCanExecute() => ValidateFunc();
 
         private Invoice SetupInvoiceObject()
         {
-            var invoice = new Invoice(null)
+            var invoice = new Invoice
             {
                 BankInformation = SetupBankInformationObject(),
                 Contractor = SetupContractorObject(),
@@ -270,9 +285,9 @@ namespace InvoicingSystem_SQLite.ViewModels
 
         private Customer SetupCustomerObject()
         {
-            var result = new Customer(null)
+            var result = new Customer
             {
-                Address = new Address(null)
+                Address = new Address
                 {
                     ZipCode = CustomerZipCode,
                     BuildingNumber = CustomerBuildingNumber,
@@ -280,7 +295,7 @@ namespace InvoicingSystem_SQLite.ViewModels
                     City = CustomerCity
                 },
                 CorporationName = CustomerName,
-                IN = (int) CustomerIN,
+                IdentificationNumber = (int)CustomerIN,
                 VATIN = CustomerVATIN
             };
 
@@ -289,7 +304,7 @@ namespace InvoicingSystem_SQLite.ViewModels
 
         private BankInformation SetupBankInformationObject()
         {
-            var result = new BankInformation(null)
+            var result = new BankInformation
             {
                 AccountNumber = BankAccount,
                 VariableSymbol = VariableSymbol,
@@ -301,16 +316,16 @@ namespace InvoicingSystem_SQLite.ViewModels
 
         private Contractor SetupContractorObject()
         {
-            var result = new Contractor(null)
+            var result = new Contractor
             {
-                Address = new Address(null)
+                Address = new Address
                 {
                     BuildingNumber = ContractorBuildingNumber,
                     City = ContractorCity,
                     ZipCode = ContractorZipCode,
                     Street = ContractorStreet
                 },
-                IN = (int) ContractorIN,
+                IdentificationNumber = (int)ContractorIN,
                 CityOfEvidence = ContractorCity,
                 FirstName = ContractorFirstName,
                 LastName = ContractorLastName,

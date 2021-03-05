@@ -1,4 +1,8 @@
-﻿using InvoicingSystem_SQLite.ViewModels;
+﻿using System.ComponentModel.Composition;
+using Invoicing.Models;
+using InvoicingSystem_SQLite.DataAccess.SQL;
+using InvoicingSystem_SQLite.ViewModels;
+using Microsoft.Practices.ServiceLocation;
 
 namespace InvoicingSystem_SQLite.Views
 {
@@ -15,7 +19,8 @@ namespace InvoicingSystem_SQLite.Views
 
         public MainView()
         {
-            ViewModel = new MainViewModel { ValidateFunc = () => InvoiceControl.Validate() };
+            ViewModel = ServiceLocator.Current.GetInstance<MainViewModel>();
+            ViewModel.ValidateFunc = () => InvoiceControl.Validate();
             InitializeComponent();
         }
     }

@@ -151,7 +151,7 @@
     <value>First name</value>
   </data>
   <data name="IdentificationNumber" xml:space="preserve">
-    <value>IN</value>
+    <value>IdentificationNumber</value>
   </data>
   <data name="InvoiceNumber" xml:space="preserve">
     <value>Invoice number</value>

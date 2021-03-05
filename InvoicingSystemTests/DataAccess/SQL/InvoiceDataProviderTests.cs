@@ -8,46 +8,45 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
 using System.Collections.Generic;
+using FluentAssertions;
+using InvoicingSystem_SQLite.Logic.Constants;
+using InvoicingSystemTests.Mocks;
 
 namespace InvoicingSystemTests.DataAccess.SQL
 {
     [TestClass]
     public class InvoiceDataProviderTests
     {
+        #region Fields
+
         private const string JOB_DESCRIPTION = "blablabla";
-
-        private Mock<IQueryExecutor> queryExecutorMock;
-        private Mock<IServiceLocator> serviceLocatorMock;
-
-        private IQueryExecutor queryExecutor;
-        private ITypeToTableMappingManager typeToTableMappingManager;
-        private IServiceLocator serviceLocator;
-
         private Invoice invoice;
         private TestInvoiceDataProvider provider;
-        private SqlDataProvider<BankInformation> bankInformationProvider;
-        private SqlDataProvider<Customer> customerProvider;
-        private SqlDataProvider<Contractor> contractorProvider;
         private EnumerableStringComparer comparer;
+        private Mock<ISqlDataProvider<Customer>> customerProviderMock;
+        private Mock<ISqlDataProvider<Contractor>> contractorProviderMock;
+        private Mock<ISqlDataProvider<BankInformation>> bankInformationProviderMock;
+
+        #endregion Fields
+
+        #region Test Initialize
 
         [TestInitialize]
         public void TestInitialize()
         {
-            queryExecutorMock = new Mock<IQueryExecutor>();
-            queryExecutor = queryExecutorMock.Object;
+            var queryExecutorMock = new Mock<IQueryExecutor>();
+            var mappingManagerMock = MockProvider.GetMockedMappingManager();
 
-            typeToTableMappingManager = new TypeToTableMappingManager();
+            customerProviderMock = new Mock<ISqlDataProvider<Customer>>();
+            contractorProviderMock = new Mock<ISqlDataProvider<Contractor>>();
+            bankInformationProviderMock = new Mock<ISqlDataProvider<BankInformation>>();
 
-            bankInformationProvider = new SqlDataProvider<BankInformation>(queryExecutor, typeToTableMappingManager);
-            customerProvider = new SqlDataProvider<Customer>(queryExecutor, typeToTableMappingManager);
-            contractorProvider = new SqlDataProvider<Contractor>(queryExecutor, typeToTableMappingManager);
+            var serviceLocatorMock = new Mock<IServiceLocator>();
+            serviceLocatorMock.Setup(m => m.GetInstance<ISqlDataProvider<BankInformation>>()).Returns(bankInformationProviderMock.Object);
+            serviceLocatorMock.Setup(m => m.GetInstance<ISqlDataProvider<Customer>>(nameof(CustomerDataProvider))).Returns(customerProviderMock.Object);
+            serviceLocatorMock.Setup(m => m.GetInstance<ISqlDataProvider<Contractor>>(nameof(ContractorDataProvider))).Returns(contractorProviderMock.Object);
 
-            serviceLocatorMock = new Mock<IServiceLocator>();
-            serviceLocatorMock.Setup(m => m.GetInstance<SqlDataProvider<BankInformation>>()).Returns(bankInformationProvider);
-            serviceLocatorMock.Setup(m => m.GetInstance<SqlDataProvider<Customer>>()).Returns(customerProvider);
-            serviceLocatorMock.Setup(m => m.GetInstance<SqlDataProvider<Contractor>>()).Returns(contractorProvider);
-            serviceLocator = serviceLocatorMock.Object;
-            ServiceLocator.SetLocatorProvider(() => serviceLocator);
+            ServiceLocator.SetLocatorProvider(() => serviceLocatorMock.Object);
 
             invoice = new Invoice(1)
             {
@@ -62,14 +61,63 @@ namespace InvoicingSystemTests.DataAccess.SQL
                 Customer = new Customer(4)
             };
 
-            provider = new TestInvoiceDataProvider(queryExecutor, typeToTableMappingManager);
+            provider = new TestInvoiceDataProvider
+            (
+                queryExecutorMock.Object,
+                mappingManagerMock.Object,
+                customerProviderMock.Object,
+                contractorProviderMock.Object,
+                bankInformationProviderMock.Object
+            );
             comparer = new EnumerableStringComparer();
         }
 
-        #region Test Method
+        #endregion Test Initialize
+
+        #region Test Methods
 
         [TestMethod]
-        public void GetJoinedInsertInformationTest()
+        public void InvoiceDataProvider_CreateOrUpdateTest()
+        {
+            var localInvoice = new Invoice();
+            var mockedBankInfo = new BankInformation(1);
+            var mockedCustomer = new Customer(2);
+            var mockedContractor = new Contractor(3);
+
+            provider.Invoking(p => p.CreateOrUpdate(localInvoice)).Should().Throw<ArgumentNullException>();
+            localInvoice.BankInformation = new BankInformation();
+
+            provider.Invoking(p => p.CreateOrUpdate(localInvoice)).Should().Throw<ArgumentNullException>();
+            localInvoice.Customer = new Customer();
+
+            provider.Invoking(p => p.CreateOrUpdate(localInvoice)).Should().Throw<ArgumentNullException>();
+            localInvoice.Contractor = new Contractor();
+
+            provider.Invoking(p => p.CreateOrUpdate(localInvoice)).Should().Throw<ArgumentNullException>();
+            localInvoice.Customer.Address = new Address();
+
+            provider.Invoking(p => p.CreateOrUpdate(localInvoice)).Should().Throw<ArgumentNullException>();
+            localInvoice.Contractor.Address = new Address();
+
+            bankInformationProviderMock.Setup(m => m.CreateOrUpdate(It.IsAny<BankInformation>()))
+                .Returns((string.Empty, true));
+            bankInformationProviderMock.Setup(m => m.GetByEverythingExceptId(It.IsAny<BankInformation>()))
+                .Returns(new List<BankInformation> { mockedBankInfo });
+            customerProviderMock.Setup(m => m.CreateOrUpdate(It.IsAny<Customer>())).Returns((string.Empty, true));
+            customerProviderMock.Setup(m => m.GetByEverythingExceptId(It.IsAny<Customer>())).Returns(new List<Customer> { mockedCustomer });
+            contractorProviderMock.Setup(m => m.CreateOrUpdate(It.IsAny<Contractor>())).Returns((string.Empty, true));
+            contractorProviderMock.Setup(m => m.GetByEverythingExceptId(It.IsAny<Contractor>()))
+                .Returns(new List<Contractor> { mockedContractor });
+
+            provider.CreateOrUpdate(localInvoice);
+
+            localInvoice.BankInformation.Should().BeEquivalentTo(mockedBankInfo);
+            localInvoice.Customer.Should().BeEquivalentTo(mockedCustomer);
+            localInvoice.Contractor.Should().BeEquivalentTo(mockedContractor);
+        }
+
+        [TestMethod]
+        public void InvoiceDataProvider_GetJoinedInsertInformationTest()
         {
             var expectedNames = "Currency, DateOfIssue, DueDate, InvoiceNumber, JobDescription, PaymentMethod, Price, " +
                                 "IdBankInformation, IdContractor, IdCustomer";
@@ -88,17 +136,17 @@ namespace InvoicingSystemTests.DataAccess.SQL
             var actualNames = actual.joinedPropertyNames;
             var actualValues = actual.joinedPropertyValues;
 
-            Assert.AreEqual(expectedNames, actualNames);
-            Assert.AreEqual(expectedValues, actualValues);
+            actualNames.Should().Be(expectedNames);
+            actualValues.Should().Be(expectedValues);
         }
 
         [TestMethod]
-        public void GetJoinedChangesForUpdateTest()
+        public void InvoiceDataProvider_GetJoinedChangesForUpdateTest()
         {
             var expected = new List<string>
             {
                 "Currency = \"CZK\"",
-                "DateOfIssue = \"08.02.2020\"", 
+                "DateOfIssue = \"08.02.2020\"",
                 "DueDate = \"10.02.2020\"",
                 "InvoiceNumber = \"20200001\"",
                 $"JobDescription = \"{JOB_DESCRIPTION}\"",
@@ -114,17 +162,25 @@ namespace InvoicingSystemTests.DataAccess.SQL
             Assert.IsTrue(areEqual);
         }
 
-        #endregion Test Method
+        #endregion Test Methods
 
         private class TestInvoiceDataProvider : InvoiceDataProvider
         {
-            public TestInvoiceDataProvider(IQueryExecutor queryExecutor, ITypeToTableMappingManager typeToTableMappingManager) : base(queryExecutor, typeToTableMappingManager)
+            public TestInvoiceDataProvider
+            (
+                IQueryExecutor queryExecutor,
+                ITypeToTableMappingManager typeToTableMappingManager,
+                ISqlDataProvider<Customer> customerProvider,
+                ISqlDataProvider<Contractor> contractorProvider,
+                ISqlDataProvider<BankInformation> bankInformationProvider
+            )
+                : base(queryExecutor, typeToTableMappingManager, customerProvider, contractorProvider, bankInformationProvider)
             {
             }
 
             public new IEnumerable<string> GetJoinedChangesForUpdate(Invoice item) => base.GetJoinedChangesForUpdate(item);
 
-            public new (string joinedPropertyNames, string joinedPropertyValues) GetJoinedInsertInformation(
+            public new(string joinedPropertyNames, string joinedPropertyValues) GetJoinedInsertInformation(
                 Invoice item) => base.GetJoinedInsertInformation(item);
         }
     }

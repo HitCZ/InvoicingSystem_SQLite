@@ -14,7 +14,7 @@ namespace InvoicingSystem_SQLite.Logic.Extensions
 
         public static decimal? ConvertToDecimal(this string value)
         {
-            var canConvert = decimal.TryParse(value.Replace(" ", string.Empty), out var number);
+            var canConvert = decimal.TryParse(value?.Replace(" ", string.Empty), out var number);
 
             if (canConvert)
                 return number;

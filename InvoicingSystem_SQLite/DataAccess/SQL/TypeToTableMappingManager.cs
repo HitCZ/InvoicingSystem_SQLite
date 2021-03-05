@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
+using InvoicingSystem_SQLite.Logic.Constants;
 
 namespace InvoicingSystem_SQLite.DataAccess.SQL
 {
@@ -15,11 +16,11 @@ namespace InvoicingSystem_SQLite.DataAccess.SQL
         {
             typesTables = new ReadOnlyDictionary<Type, string>(new Dictionary<Type, string>
             {
-                { typeof(Address), "Addresses" },
-                { typeof(BankInformation), "BankInformation" },
-                { typeof(Contractor), "Contractors" },
-                { typeof(Customer), "Customers" },
-                { typeof(Invoice), "Invoices" }
+                { typeof(Address), Constants.ADDRESS_TABLE_NAME },
+                { typeof(BankInformation), Constants.BANK_INFORMATION_TABLE_NAME },
+                { typeof(Contractor), Constants.CONTRACTOR_TABLE_NAME },
+                { typeof(Customer), Constants.CUSTOMER_TABLE_NAME },
+                { typeof(Invoice), Constants.INVOICE_TABLE_NAME }
             });
         }
 

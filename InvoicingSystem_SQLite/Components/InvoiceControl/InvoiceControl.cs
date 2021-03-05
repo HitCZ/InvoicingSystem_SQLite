@@ -82,15 +82,15 @@ namespace InvoicingSystem_SQLite.Components.InvoiceControl
 
         // ReSharper disable once UnusedMember.Global
         // ReSharper disable once InconsistentNaming
-        public uint ContractorIN
+        public uint ContractorIdentificationNumber
         {
-            get => (uint)GetValue(ContractorINProperty);
-            set => SetValue(ContractorINProperty, value);
+            get => (uint)GetValue(ContractorIdentificationNumberProperty);
+            set => SetValue(ContractorIdentificationNumberProperty, value);
         }
 
         // ReSharper disable once InconsistentNaming
-        public static readonly DependencyProperty ContractorINProperty =
-            DependencyProperty.Register("ContractorIN", typeof(uint), typeof(InvoiceControl));
+        public static readonly DependencyProperty ContractorIdentificationNumberProperty =
+            DependencyProperty.Register("ContractorIdentificationNumber", typeof(uint), typeof(InvoiceControl));
 
         public string ContractorCity
         {
@@ -102,15 +102,15 @@ namespace InvoicingSystem_SQLite.Components.InvoiceControl
             DependencyProperty.Register("ContractorCity", typeof(string), typeof(InvoiceControl));
 
         // ReSharper disable once InconsistentNaming
-        public uint IN
+        public uint IdentificationNumber
         {
-            get => (uint)GetValue(INProperty);
-            set => SetValue(INProperty, value);
+            get => (uint)GetValue(IdentificationNumberProperty);
+            set => SetValue(IdentificationNumberProperty, value);
         }
 
         // ReSharper disable once InconsistentNaming
-        public static readonly DependencyProperty INProperty =
-            DependencyProperty.Register("IN", typeof(uint), typeof(InvoiceControl));
+        public static readonly DependencyProperty IdentificationNumberProperty =
+            DependencyProperty.Register("IdentificationNumber", typeof(uint), typeof(InvoiceControl));
 
         // ReSharper disable once InconsistentNaming
         public bool IsVATPayer
@@ -183,15 +183,15 @@ namespace InvoicingSystem_SQLite.Components.InvoiceControl
 
 
         // ReSharper disable once InconsistentNaming
-        public uint CustomerIN
+        public uint CustomerIdentificationNumber
         {
-            get => (uint)GetValue(CustomerINProperty);
-            set => SetValue(CustomerINProperty, value);
+            get => (uint)GetValue(CustomerIdentificationNumberProperty);
+            set => SetValue(CustomerIdentificationNumberProperty, value);
         }
 
         // ReSharper disable once InconsistentNaming
-        public static readonly DependencyProperty CustomerINProperty =
-            DependencyProperty.Register("CustomerIN", typeof(uint), typeof(InvoiceControl));
+        public static readonly DependencyProperty CustomerIdentificationNumberProperty =
+            DependencyProperty.Register("CustomerIdentificationNumber", typeof(uint), typeof(InvoiceControl));
 
         // ReSharper disable once IdentifierTypo
         // ReSharper disable once InconsistentNaming
@@ -358,8 +358,8 @@ namespace InvoicingSystem_SQLite.Components.InvoiceControl
                         return validator.ValidateZipCode(ContractorZipCode);
                     case nameof(ContractorCity):
                         return validator.ValidateCity(ContractorCity);
-                    case nameof(ContractorIN):
-                        return validator.ValidateIN(ContractorIN);
+                    case nameof(ContractorIdentificationNumber):
+                        return validator.ValidateIN(ContractorIdentificationNumber);
                     case nameof(CityOfEvidence):
                         return validator.ValidateCity(CityOfEvidence);
                     case nameof(CustomerName):
@@ -372,8 +372,8 @@ namespace InvoicingSystem_SQLite.Components.InvoiceControl
                         return validator.ValidateZipCode(CustomerZipCode);
                     case nameof(CustomerCity):
                         return validator.ValidateCity(CustomerCity);
-                    case nameof(CustomerIN):
-                        return validator.ValidateIN(CustomerIN);
+                    case nameof(CustomerIdentificationNumber):
+                        return validator.ValidateIN(CustomerIdentificationNumber);
                     case nameof(CustomerVATIN):
                         return validator.ValidateVATIN(CustomerVATIN);
                     case nameof(BankConnection):

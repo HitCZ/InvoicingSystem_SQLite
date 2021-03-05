@@ -5,6 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using Invoicing.Models;
 using PropertyInformation = InvoicingSystem_SQLite.DataAccess.SQL.PropertyInformation;
 // ReSharper disable UnusedAutoPropertyAccessor.Local
@@ -53,7 +54,7 @@ namespace InvoicingSystemTests.DataAccess.SQL
         [TestMethod]
         public void GetJoinedInsertInformationTest()
         {
-            var expectedNames = "ContractorFirstName, Id, ContractorLastName, ZipCode";
+            var expectedNames = "FirstName, Id, LastName, ZipCode";
             var expectedValues = "\"John\", \"1\", \"Doe\", \"27351\"";
 
             var actual = provider.GetJoinedInsertInformation(testModel);
@@ -67,7 +68,7 @@ namespace InvoicingSystemTests.DataAccess.SQL
         [TestMethod]
         public void GetJoinedChangesForUpdateTest()
         {
-            var expected = new List<string> { "ContractorFirstName = \"John\"", "ContractorLastName = \"Doe\"", "ZipCode = \"27351\"" };
+            var expected = new List<string> { "FirstName = \"John\"", "LastName = \"Doe\"", "ZipCode = \"27351\"" };
 
             var actual = provider.GetJoinedChangesForUpdate(testModel);
             var areEqual = enumerableStringComparer.Compare(expected, actual) == 0;
@@ -79,12 +80,12 @@ namespace InvoicingSystemTests.DataAccess.SQL
         public void GetInsertQueryTest()
         {
             var expected =
-                $"INSERT INTO {TABLE_NAME} (ContractorFirstName, ContractorLastName, ZipCode) VALUES (\"John\", \"Doe\", \"27351\")";
+                $"INSERT INTO {TABLE_NAME} (FirstName, LastName, ZipCode) VALUES (\"John\", \"Doe\", \"27351\")";
             var actual = provider.GetInsertQuery(testModel);
             
             if (testModel.Id.HasValue)
             {
-                var indexInNames = expected.IndexOf("ContractorLastName", StringComparison.Ordinal);
+                var indexInNames = expected.IndexOf("LastName", StringComparison.Ordinal);
                 expected = expected.Insert(indexInNames, "Id, ");
                 var indexInValues = expected.IndexOf("Doe", StringComparison.Ordinal) - 2;
                 expected = expected.Insert(indexInValues, " \"1\",");
@@ -96,7 +97,7 @@ namespace InvoicingSystemTests.DataAccess.SQL
         [TestMethod]
         public void GetUpdateQueryTest()
         {
-            var expected = $"UPDATE {TABLE_NAME} SET ContractorFirstName = \"John\", ContractorLastName = \"Doe\", ZipCode = \"27351\" WHERE Id = 1";
+            var expected = $"UPDATE {TABLE_NAME} SET FirstName = \"John\", LastName = \"Doe\", ZipCode = \"27351\" WHERE Id = 1";
             var actual = provider.GetUpdateQuery(testModel);
 
             Assert.AreEqual(expected, actual);
@@ -107,8 +108,8 @@ namespace InvoicingSystemTests.DataAccess.SQL
         {
             var expected = new List<PropertyInformation>
             {
-                new PropertyInformation("ContractorFirstName", "John"),
-                new PropertyInformation("ContractorLastName", "Doe"),
+                new PropertyInformation("FirstName", "John"),
+                new PropertyInformation("LastName", "Doe"),
                 new PropertyInformation("ZipCode", (uint)27351),
                 new PropertyInformation("Id", 1)
             };
@@ -122,9 +123,9 @@ namespace InvoicingSystemTests.DataAccess.SQL
         [TestMethod]
         public void GetAllConstraintsExceptIdTest()
         {
-            var expected = new List<string> { "ContractorFirstName = \"John\"", "AND", "ContractorLastName = \"Doe\"", "AND", "ZipCode = \"27351\"" };
+            var expected = new List<string> { "FirstName = \"John\"", "AND", "LastName = \"Doe\"", "AND", "ZipCode = \"27351\"" };
             var actual = provider.GetAllConstraintsExceptId(
-                new List<string> { "ContractorFirstName", "ContractorLastName", "ZipCode" },
+                new List<string> { "FirstName", "LastName", "ZipCode" },
                 new List<object> { "John", "Doe", (uint)27351 });
             
             var areEqual = enumerableStringComparer.Compare(expected, actual) == 0;
@@ -155,7 +156,7 @@ namespace InvoicingSystemTests.DataAccess.SQL
 
             public new string GetUpdateQuery(TestModel item) => base.GetUpdateQuery(item);
 
-            public new List<PropertyInformation> GetPropertiesInformation(TestModel item) => base.GetPropertiesInformation(item);
+            public new List<PropertyInformation> GetPropertiesInformation(TestModel item, Predicate<PropertyInfo> filterPredicate = null) => base.GetPropertiesInformation(item, filterPredicate);
 
             public new List<string> GetAllConstraintsExceptId(List<string> propertyNames, List<object> propertyValues)
             {
@@ -169,7 +170,7 @@ namespace InvoicingSystemTests.DataAccess.SQL
             public string LastName { get; set; }
             public uint ZipCode { get; set; }
 
-            public TestModel(int? id) : base(id)
+            public TestModel(int id) : base(id)
             {
             }
         }

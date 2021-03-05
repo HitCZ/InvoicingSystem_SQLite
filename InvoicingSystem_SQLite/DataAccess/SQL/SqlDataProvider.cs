@@ -3,16 +3,17 @@ using Invoicing.Models;
 using InvoicingSystem_SQLite.DataAccess.QueryExecution;
 using InvoicingSystem_SQLite.Logic.Exceptions;
 using InvoicingSystem_SQLite.Logic.Extensions;
+using InvoicingSystem_SQLite.Logic.Providers;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 
 namespace InvoicingSystem_SQLite.DataAccess.SQL
 {
-    [Export, PartCreationPolicy(CreationPolicy.NonShared)]
-    public class SqlDataProvider<T> where T : IDatabaseStorableObject
+    public class SqlDataProvider<T> : ISqlDataProvider<T> where T : IDatabaseStorableObject
     {
         #region Fields
 
@@ -114,8 +115,14 @@ namespace InvoicingSystem_SQLite.DataAccess.SQL
         /// </summary>
         public IEnumerable<T> GetByEverythingExceptId(T item)
         {
+            var filter = PropertyInfoFilterProvider.GetExcludeNotInDatabasePropertiesFilter();
+
             // Shouldn't contain ID, since it is null
-            var propertyInformation = GetPropertiesInformation(item);
+            var propertyInformation = GetPropertiesInformation(item, filter);
+
+            //if (!propertyInformation.Any())
+            //    return new List<T>();
+
             var propertyNames = propertyInformation.Select(p => p.ColumnName).ToList();
             var propertyValues = propertyInformation.Select(p => p.Value).ToList();
 
@@ -139,7 +146,8 @@ namespace InvoicingSystem_SQLite.DataAccess.SQL
 
         protected virtual (string joinedPropertyNames, string joinedPropertyValues) GetJoinedInsertInformation(T item)
         {
-            var propertyInformation = GetPropertiesInformation(item).OrderBy(p => p.ColumnName).ToList();
+            var filter = PropertyInfoFilterProvider.GetExcludeNotInDatabasePropertiesFilter();
+            var propertyInformation = GetPropertiesInformation(item, filter).OrderBy(p => p.ColumnName).ToList();
             var propertyNames = propertyInformation.Select(p => p.ColumnName);
             var propertyValues = propertyInformation.Select(p => p.Value);
 
@@ -150,7 +158,7 @@ namespace InvoicingSystem_SQLite.DataAccess.SQL
         }
 
         /// <summary>
-        /// Returns strings in format "PropertyName = value" (e.g. ContractorFirstName = "John"), without ID and <see cref="IDatabaseStorableObject"/> types.
+        /// Returns strings in format "PropertyName = value" (e.g. FirstName = "John"), without ID and <see cref="IDatabaseStorableObject"/> types.
         /// </summary>
         protected virtual IEnumerable<string> GetJoinedChangesForUpdate(T item)
         {
@@ -233,13 +241,18 @@ namespace InvoicingSystem_SQLite.DataAccess.SQL
         /// Returns collection of property names and values, of all properties, except <see cref="IDatabaseStorableObject"/>.
         /// When property value is null, it is not included within the list.
         /// </summary>
-        protected List<PropertyInformation> GetPropertiesInformation(T item)
+        protected List<PropertyInformation> GetPropertiesInformation(T item, Predicate<PropertyInfo> filteringPredicate = null)
         {
             var properties = typeof(T).GetProperties();
             var result = new List<PropertyInformation>();
 
             foreach (var currentProperty in properties)
             {
+                var shouldIncludeProperty = filteringPredicate?.Invoke(currentProperty);
+
+                if (shouldIncludeProperty.HasValue && !shouldIncludeProperty.Value)
+                    continue;
+
                 var propertyType = currentProperty.PropertyType;
 
                 if ((typeof(IDatabaseStorableObject).IsAssignableFrom(propertyType)))

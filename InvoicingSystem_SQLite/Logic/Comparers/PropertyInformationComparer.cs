@@ -1,6 +1,6 @@
 ﻿using InvoicingSystem_SQLite.DataAccess.SQL;
 using System.Collections.Generic;
-using OfficeOpenXml.FormulaParsing.Utilities;
+using InvoicingSystem_SQLite.Logic.Extensions;
 
 namespace InvoicingSystem_SQLite.Logic.Comparers
 {

@@ -160,7 +160,7 @@ namespace InvoicingSystem_SQLite.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to IN.
+        ///   Looks up a localized string similar to IdentificationNumber.
         /// </summary>
         public static string IdentificationNumber {
             get {

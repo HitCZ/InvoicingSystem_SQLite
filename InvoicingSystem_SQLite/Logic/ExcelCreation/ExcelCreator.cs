@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using Invoicing.Models;
-using InvoicingSystem.Logic.Constants;
+using InvoicingSystem_SQLite.Logic.Constants;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
 
@@ -106,7 +106,7 @@ namespace InvoicingSystem_SQLite.Logic.ExcelCreation
             coordsAndValues.Add(new KeyValuePair<string, string>(
                 "contractorZipcode", "D9"), $"{contractor.Address.ZipCode} {contractor.Address.City}");
             coordsAndValues.Add(new KeyValuePair<string, string>(
-                "contractorIN", "C11"), $"{Strings.IN_CAPTION}: {contractor.IN}");
+                "contractorIN", "C11"), $"{Strings.IN_CAPTION}: {contractor.IdentificationNumber}");
 
             // Is contractor a VAT payer??
             var isVatPayerString
@@ -133,7 +133,7 @@ namespace InvoicingSystem_SQLite.Logic.ExcelCreation
                 "customerZipcode", "G9"),
                 $"{customer.Address.ZipCode} {customer.Address.City}");
             coordsAndValues.Add(new KeyValuePair<string, string>(
-                "customerIN", "G11"), $"{Strings.IN_CAPTION}: {customer.IN},");
+                "customerIN", "G11"), $"{Strings.IN_CAPTION}: {customer.IdentificationNumber},");
             coordsAndValues.Add(new KeyValuePair<string, string>(
                 // ReSharper disable once StringLiteralTypo
                 "customerVATIN", "H11"), $"{Strings.CUSTOMER_VATIN_CAPTION}: {customer.VATIN}");

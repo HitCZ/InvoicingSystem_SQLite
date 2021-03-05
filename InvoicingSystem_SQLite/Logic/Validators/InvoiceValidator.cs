@@ -43,7 +43,7 @@ namespace InvoicingSystem_SQLite.Logic.Validators
         public string ValidateZipCode(uint zipCode) => zipCode > 10 ? null : GetInvalidFormatMessage(Strings.ZipCode);
 
         /// <summary>
-        /// Standard length of the IN should be 8 digits.
+        /// Standard length of the IdentificationNumber should be 8 digits.
         /// https://cs.wikipedia.org/wiki/Identifika%C4%8Dn%C3%AD_%C4%8D%C3%ADslo_osoby
         /// </summary>
         // ReSharper disable once InconsistentNaming
