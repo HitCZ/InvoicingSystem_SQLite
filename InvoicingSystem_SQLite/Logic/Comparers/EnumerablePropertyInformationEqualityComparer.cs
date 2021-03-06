@@ -21,25 +21,11 @@ namespace InvoicingSystem_SQLite.Logic.Comparers
             if (xList.Count != yList.Count)
                 return false;
 
-            foreach (var xItem in xList)
-            {
-                var yItem = yList.SingleOrDefault(p => p.ColumnName == xItem.ColumnName);
+            var listsAreSame = xList.All(xItem => yList.Any(yItem => comparer.Equals(xItem, yItem)));
 
-                if (yItem is null)
-                    return false;
-
-                var result = comparer.Equals(xItem, yItem);
-
-                if (!result)
-                    return false;
-            }
-
-            return true;
+            return listsAreSame;
         }
 
-        public int GetHashCode(IEnumerable<PropertyInformation> obj)
-        {
-            return obj.GetHashCode();
-        }
+        public int GetHashCode(IEnumerable<PropertyInformation> obj) => obj.GetHashCode();
     }
 }

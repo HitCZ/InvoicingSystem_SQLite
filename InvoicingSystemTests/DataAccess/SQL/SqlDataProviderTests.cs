@@ -5,6 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using Invoicing.Models;
 using PropertyInformation = InvoicingSystem_SQLite.DataAccess.SQL.PropertyInformation;
@@ -24,7 +25,6 @@ namespace InvoicingSystemTests.DataAccess.SQL
         private ITypeToTableMappingManager typeToTableMappingManager;
 
         private TestDataProvider provider;
-        private EnumerableStringEqualityComparer enumerableStringComparer;
         private EnumerablePropertyInformationEqualityComparer enumerablePropertyInformationComparer;
         private TestModel testModel;
 
@@ -39,7 +39,6 @@ namespace InvoicingSystemTests.DataAccess.SQL
             typeToTableMappingManager = typeToTableMappingManagerMock.Object;
 
             provider = new TestDataProvider(queryExecutor, typeToTableMappingManager);
-            enumerableStringComparer = new EnumerableStringEqualityComparer();
             enumerablePropertyInformationComparer = new EnumerablePropertyInformationEqualityComparer();
             testModel = new TestModel(1)
             {
@@ -71,7 +70,7 @@ namespace InvoicingSystemTests.DataAccess.SQL
             var expected = new List<string> { "FirstName = \"John\"", "LastName = \"Doe\"", "ZipCode = \"27351\"" };
 
             var actual = provider.GetJoinedChangesForUpdate(testModel);
-            var areEqual = enumerableStringComparer.Equals(expected, actual);
+            var areEqual = expected.SequenceEqual(actual);
 
             Assert.IsTrue(areEqual);
         }
@@ -127,8 +126,8 @@ namespace InvoicingSystemTests.DataAccess.SQL
             var actual = provider.GetAllConstraintsExceptId(
                 new List<string> { "FirstName", "LastName", "ZipCode" },
                 new List<object> { "John", "Doe", (uint)27351 });
-            
-            var areEqual = enumerableStringComparer.Equals(expected, actual);
+
+            var areEqual = expected.SequenceEqual(actual);
 
             Assert.IsTrue(areEqual);
         }

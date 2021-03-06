@@ -76,8 +76,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataAccess\SQL\ContractorDataProviderTests.cs" />
+    <Compile Include="DataAccess\SQL\CustomerDataProviderTests.cs" />
     <Compile Include="DataAccess\SQL\InvoiceDataProviderTests.cs" />
     <Compile Include="DataAccess\SQL\SqlDataProviderTests.cs" />
+    <Compile Include="DataAccess\SQL\TypeToTableMappingManagerTests.cs" />
     <Compile Include="Extensions\IEnumerableExtensionsTests.cs" />
     <Compile Include="Extensions\PropertyInfoExtensionsTests.cs" />
     <Compile Include="Extensions\StringExtensionsTests.cs" />
